@@ -9,5 +9,5 @@ public class ConfigureType {
     public static final String LIST = "list";
     public static final String EDITOR = "editor";
     public static final String SWITCH = "switch";
-    public static final String MULTILIST = "multilist";
+    public static final String MULTILIST = "multiList";
 }

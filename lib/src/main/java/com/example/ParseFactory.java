@@ -27,6 +27,7 @@ public class ParseFactory {
             case "screen":
             case "category":
             case "list":
+            case "multiList":
             case "editor":
                 readAttributes(attrs,sb);
                 break;

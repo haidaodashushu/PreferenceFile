@@ -327,6 +327,9 @@ public class DataParseTools {
                     }
                 }
             }
+            if (entity != null) {
+                ((ConfigureScreenEntity)entity).setItemList(linkedList);
+            }
             return entity;
         } catch (JSONException e) {
             e.printStackTrace();

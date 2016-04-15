@@ -3,4 +3,21 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+
+    <color name="dim_foreground_dark">#bebebe</color>
+
+    <color name="dim_foreground_dark_disabled">#80bebebe</color>
+
+    <color name="dim_foreground_dark_inverse">#323232</color>
+
+    <color name="dim_foreground_dark_inverse_disabled">#80323232</color>
+
+    <color name="hint_foreground_dark">#808080</color>
+
+    <color name="background_dark">#ff000000</color>
+
+    <color name="bright_foreground_light">@color/background_dark</color>
+
+    <color name="bright_foreground_dark_inverse">@color/bright_foreground_light</color>
 </resources>
