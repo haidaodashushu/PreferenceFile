@@ -269,13 +269,6 @@ public class DataParseTools {
     }
 
 
-
-
-
-
-
-
-
     public static ConfigureEntity getScreen(String key) {
         try {
             JSONObject object = new JSONObject(Constants.jsonDate);
@@ -352,30 +345,4 @@ public class DataParseTools {
             entity.setTitle(optString);
         }
     }
-
-   /* *//***
-     * 解析item项
-     * @param key
-     * @param jsonObject
-     *//*
-    public static void parseItemEntity(String key, JSONObject jsonObject) {
-        String type = jsonObject.optString(ConfigureManager.TYPE);
-        switch (type) {
-            case ConfigureType.SCREEN:
-                parseScreenData(key, jsonObject);
-                break;
-        }
-
-    }*/
-
-
-
-
-
-
-
-
-
-
-
 }
