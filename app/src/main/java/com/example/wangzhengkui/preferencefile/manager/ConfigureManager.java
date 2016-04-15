@@ -218,11 +218,11 @@ public class ConfigureManager {
                 if (restoreChild && ce instanceof ConfigureScreenEntity) {
                     restore(getScreen(ckey),restoreChild);
                 } else {
-                    String cdefaultValue = (String) entity.getValue();
                     Object cot = ce.getValue();
                     if (cot == null){
                         continue;
                     }
+                    String cdefaultValue = (String) cot;
                     if(!TextUtils.isEmpty(ckey) && !TextUtils.isEmpty(cdefaultValue)) {
                         writeCacheValue(ckey, cdefaultValue);
                     }
