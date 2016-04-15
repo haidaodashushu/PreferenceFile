@@ -27,8 +27,13 @@ public class ParseFactory {
             case "screen":
             case "category":
             case "list":
-            case "switch":
             case "editor":
+                readAttributes(attrs,sb);
+                break;
+            case "switch":
+                //添加"entry":[,
+                AppendTools.appendWithQuotes(sb,"entry");
+                AppendTools.appendObj(sb,":[\"true\",\"false\"],");
                 readAttributes(attrs,sb);
                 break;
             case "entry":
@@ -69,6 +74,11 @@ public class ParseFactory {
                 case "defaultValue":
                     //添加"defaultValue":"value",
                     AppendTools.appendJson(sb,"defaultValue",attrs.getValue(i));
+                    AppendTools.appendJson(sb,"value",attrs.getValue(i));
+                    break;
+                case "value":
+                    //添加"defaultValue":"value",
+                    AppendTools.appendJson(sb,"value",attrs.getValue(i));
                     break;
                 case "version":
                     //添加"defaultValue":"value",
