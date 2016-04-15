@@ -199,13 +199,12 @@ public class ConfigureManager {
             return;
         }
         Object ot = entity.getValue();
-        if (ot == null){
-            return;
-        }
-        String key = entity.getKey();
-        String defaultValue = (String) entity.getValue();
-        if(!TextUtils.isEmpty(key) && !TextUtils.isEmpty(defaultValue)) {
-            writeCacheValue(key, defaultValue);
+        if (ot != null){
+            String key = entity.getKey();
+            String defaultValue = (String) entity.getValue();
+            if(!TextUtils.isEmpty(key) && !TextUtils.isEmpty(defaultValue)) {
+                writeCacheValue(key, defaultValue);
+            }
         }
         if (entity instanceof ConfigureScreenEntity) {
             LinkedList<ConfigureEntity> lists =  ((ConfigureScreenEntity)entity).getItemList();
@@ -215,17 +214,20 @@ public class ConfigureManager {
             for (int i = 0; i < lists.size(); i++) {
                 ConfigureEntity ce = lists.get(i);
                 if(ce == null)continue;
-                String ckey = entity.getKey();
-                Object cot = entity.getValue();
-                if (cot == null){
-                    continue;
-                }
-                String cdefaultValue = (String) entity.getValue();
-                if(!TextUtils.isEmpty(ckey) && !TextUtils.isEmpty(cdefaultValue)) {
-                    writeCacheValue(key, defaultValue);
+                String ckey = ce.getKey();
+                if (restoreChild && ce instanceof ConfigureScreenEntity) {
+                    restore(getScreen(ckey),restoreChild);
+                } else {
+                    String cdefaultValue = (String) entity.getValue();
+                    Object cot = ce.getValue();
+                    if (cot == null){
+                        continue;
+                    }
+                    if(!TextUtils.isEmpty(ckey) && !TextUtils.isEmpty(cdefaultValue)) {
+                        writeCacheValue(ckey, cdefaultValue);
+                    }
                 }
             }
         }
-
     }
 }
