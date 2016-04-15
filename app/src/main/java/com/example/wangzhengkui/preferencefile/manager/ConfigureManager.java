@@ -13,6 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -194,6 +195,37 @@ public class ConfigureManager {
      * @param restoreChild 是否同时重置子页
      */
     public static void restore(ConfigureEntity entity,boolean restoreChild) {
-        
+        if (entity == null) {
+            return;
+        }
+        Object ot = entity.getValue();
+        if (ot == null){
+            return;
+        }
+        String key = entity.getKey();
+        String defaultValue = (String) entity.getValue();
+        if(!TextUtils.isEmpty(key) && !TextUtils.isEmpty(defaultValue)) {
+            writeCacheValue(key, defaultValue);
+        }
+        if (entity instanceof ConfigureScreenEntity) {
+            LinkedList<ConfigureEntity> lists =  ((ConfigureScreenEntity)entity).getItemList();
+            if (lists == null || lists.isEmpty()){
+                return;
+            }
+            for (int i = 0; i < lists.size(); i++) {
+                ConfigureEntity ce = lists.get(i);
+                if(ce == null)continue;
+                String ckey = entity.getKey();
+                Object cot = entity.getValue();
+                if (cot == null){
+                    continue;
+                }
+                String cdefaultValue = (String) entity.getValue();
+                if(!TextUtils.isEmpty(ckey) && !TextUtils.isEmpty(cdefaultValue)) {
+                    writeCacheValue(key, defaultValue);
+                }
+            }
+        }
+
     }
 }
