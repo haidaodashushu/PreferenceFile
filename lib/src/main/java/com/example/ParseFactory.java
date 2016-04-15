@@ -33,7 +33,11 @@ public class ParseFactory {
             case "switch":
                 //添加"entry":[,
                 AppendTools.appendWithQuotes(sb,"entry");
-                AppendTools.appendObj(sb,":[\"true\",\"false\"],");
+                AppendTools.appendObj(sb,":[");
+                AppendTools.appendWithQuotes(sb,"true");
+                AppendTools.appendObj(sb,",");
+                AppendTools.appendWithQuotes(sb,false);
+                AppendTools.appendObj(sb,"],");
                 readAttributes(attrs,sb);
                 break;
             case "entry":
