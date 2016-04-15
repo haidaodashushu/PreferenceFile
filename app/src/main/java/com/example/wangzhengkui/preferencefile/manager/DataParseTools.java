@@ -73,6 +73,7 @@ public class DataParseTools {
             case ConfigureType.CATEGORY:
                 entity = new ConfigureEntity();
                 break;
+            case ConfigureType.MULTILIST:
             case ConfigureType.LIST:
                 entity = new ConfigureListEntity();
                 JSONArray array = null;
@@ -86,7 +87,6 @@ public class DataParseTools {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
                 break;
             case ConfigureType.SWITCH:
                 entity = new ConfigureListEntity();
