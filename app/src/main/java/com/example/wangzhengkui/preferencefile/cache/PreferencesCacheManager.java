@@ -37,6 +37,7 @@ import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 
 public class PreferencesCacheManager {
+
     public static final String TAG = "PreferencesCacheManager";
     private static final boolean DEBUG = false;
     private static PreferencesCacheManager mInstance;
