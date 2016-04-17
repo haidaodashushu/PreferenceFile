@@ -1,41 +1,48 @@
-package com.example.wangzhengkui.preferencefile;
+package com.example.wangzhengkui.preferencefile.preference;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.Intent;
+import android.content.DialogInterface;
+import android.graphics.Color;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
-import android.preference.ListPreference;
-import android.preference.MultiSelectListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceActivity;
 import android.os.Bundle;
-import android.preference.PreferenceCategory;
+import android.preference.ListPreference;
+import android.preference.Preference;
 import android.preference.PreferenceScreen;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseArray;
-import android.view.InflateException;
-import android.widget.BaseAdapter;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.FrameLayout;
+import android.widget.ListView;
 
+import com.example.wangzhengkui.preferencefile.R;
+import com.example.wangzhengkui.preferencefile.preference.adapter.ConfigureAdapter;
 import com.example.wangzhengkui.preferencefile.preference.entity.ConfigureEntity;
 import com.example.wangzhengkui.preferencefile.preference.entity.ConfigureListEntity;
 import com.example.wangzhengkui.preferencefile.preference.entity.ConfigureScreenEntity;
 import com.example.wangzhengkui.preferencefile.preference.entity.ConfigureType;
 import com.example.wangzhengkui.preferencefile.preference.manager.ConfigureManager;
-import com.example.wangzhengkui.preferencefile.preference.EditTextConfigureImp;
-import com.example.wangzhengkui.preferencefile.preference.ListConfigureImp;
-import com.example.wangzhengkui.preferencefile.preference.ScreenConfigureImp;
-import com.example.wangzhengkui.preferencefile.preference.SwitchConfigureImp;
 
-import java.lang.reflect.Constructor;
 import java.util.LinkedList;
 
-public class ConfigureActivity extends PreferenceActivity {
+/**
+ * @author WangZhengkui on 2016-04-17 19:40
+ */
+public class ConfigureFrame extends FrameLayout implements
+        AdapterView.OnItemClickListener,DialogInterface.OnDismissListener,ConfigureImp.OnPreferenceChangeInternalListener{
+    Context mContext;
+    ListView mListView;
+    private ConfigureScreenEntity entity;
+    ConfigureFrameParent configureFrameParent;
     /**
      * A preference value change listener that updates the preference's summary
      * to reflect its new value.
@@ -43,7 +50,7 @@ public class ConfigureActivity extends PreferenceActivity {
     private Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
-            Log.i("ConfigureActivity","Preference = "+preference.getClass());
+            Log.i("ConfigureActivity", "Preference = " + preference.getClass());
             String stringValue = value.toString();
 
             if (preference instanceof ListPreference) {
@@ -81,10 +88,9 @@ public class ConfigureActivity extends PreferenceActivity {
                 }
 
             } else if (preference instanceof ScreenConfigureImp) {
-                Intent intent = new Intent();
-                intent.putExtra("key",preference.getKey());
-                intent.setClass(ConfigureActivity.this,ConfigureActivity.class);
-                startActivity(intent);
+                ConfigureFrame dialog = new ConfigureFrame(mContext,configureFrameParent);
+                dialog.getConfigure(preference.getKey());
+                configureFrameParent.addView(dialog);
             } else {
                 // For all other preferences, set the summary to the value's
                 // simple string representation.
@@ -93,29 +99,49 @@ public class ConfigureActivity extends PreferenceActivity {
             return true;
         }
     };
-    SparseArray<Preference> preferences = new SparseArray<>(0);
+    SparseArray<ConfigureImp> preferences = new SparseArray<>(0);
+    private ConfigureScreenEntity screenEntity;
+    private ConfigureAdapter mRootAdapter;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.my_pref_pref);
-        String key = getIntent().getStringExtra("key");
-        ConfigureScreenEntity entity = null;
+    public ConfigureFrame(Context context,ConfigureFrameParent parent) {
+        this(context,parent,null);
+    }
+
+    public ConfigureFrame(Context context, ConfigureFrameParent parent,AttributeSet attrs) {
+        super(context, attrs);
+        this.mContext = context;
+        this.configureFrameParent = parent;
+        setBackgroundColor(Color.parseColor("#fafafa"));
+        requestFocus();
+        setFocusable(true);
+    }
+
+    ConfigureFrame getConfigure() {
+       return getConfigure(null);
+    }
+    ConfigureFrame getConfigure(String key) {
+        screenEntity = null;
         if (key == null) {
-            entity = ConfigureManager.getFirstScreen();
+            screenEntity = ConfigureManager.getFirstScreen();
         } else {
-            entity = (ConfigureScreenEntity) ConfigureManager.getScreen(key);
+            screenEntity = (ConfigureScreenEntity) ConfigureManager.getScreen(key);
         }
-        SparseArray<Preference> child = initData(entity);
+        SparseArray<ConfigureImp> child = initData(screenEntity);
         preferences.clear();
         for (int i = 0; i < child.size(); i++) {
             preferences.append(i, child.valueAt(i));
         }
+        getListView(null, screenEntity);
+        return this;
+    }
+
+    public ConfigureScreenEntity getScreenEntity() {
+        return screenEntity;
     }
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-    public SparseArray<Preference> initData(ConfigureScreenEntity entity) {
-        SparseArray<Preference> preferences = new SparseArray<>(0);
+    public SparseArray<ConfigureImp> initData(ConfigureScreenEntity entity) {
+        SparseArray<ConfigureImp> preferences = new SparseArray<>(0);
         if (entity == null) {
             return preferences;
         }
@@ -125,7 +151,8 @@ public class ConfigureActivity extends PreferenceActivity {
             ConfigureEntity childEntity = itemList.get(i);
             switch (childEntity.getType()) {
                 case ConfigureType.SCREEN:
-                    ScreenConfigureImp screenPreference = new ScreenConfigureImp(this);
+                    ScreenConfigureImp screenPreference = new ScreenConfigureImp(mContext);
+                    screenPreference.setListener(this);
                     screenPreference.setKey(childEntity.getKey());
                     screenPreference.setTitle(childEntity.getTitle());
                     screenPreference.setSummary(childEntity.getSummary());
@@ -135,7 +162,8 @@ public class ConfigureActivity extends PreferenceActivity {
                     preferences.append(i, screenPreference);
                     break;
                 case ConfigureType.CATEGORY:
-                    PreferenceCategory categoryPreference = new PreferenceCategory(this);
+                    CategoryConfigureImp categoryPreference = new CategoryConfigureImp(mContext);
+                    categoryPreference.setListener(this);
                     categoryPreference.setKey(childEntity.getKey());
                     categoryPreference.setTitle(childEntity.getTitle());
                     categoryPreference.setSummary(childEntity.getSummary());
@@ -145,7 +173,8 @@ public class ConfigureActivity extends PreferenceActivity {
                     preferences.append(i, categoryPreference);
                     break;
                 case ConfigureType.LIST:
-                    ListConfigureImp listPreference = new ListConfigureImp(this);
+                    ListConfigureImp listPreference = new ListConfigureImp(mContext);
+                    listPreference.setListener(this);
                     listPreference.setKey(childEntity.getKey());
                     listPreference.setTitle(childEntity.getTitle());
                     listPreference.setSummary(childEntity.getSummary());
@@ -154,11 +183,11 @@ public class ConfigureActivity extends PreferenceActivity {
                     listPreference.setEntryValues(((ConfigureListEntity) childEntity).getEntry());
                     listPreference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
                     listPreference.setOrder(i);
-
                     preferences.append(i, listPreference);
                     break;
                 case ConfigureType.MULTILIST:
-                    MultiSelectListPreference multiSelectListPreference = new MultiSelectListPreference(this);
+                    MultiSelectListConfigureImp multiSelectListPreference = new MultiSelectListConfigureImp(mContext);
+                    multiSelectListPreference.setListener(this);
                     multiSelectListPreference.setKey(childEntity.getKey());
                     multiSelectListPreference.setTitle(childEntity.getTitle());
                     multiSelectListPreference.setSummary(childEntity.getSummary());
@@ -170,7 +199,8 @@ public class ConfigureActivity extends PreferenceActivity {
                     preferences.append(i, multiSelectListPreference);
                     break;
                 case ConfigureType.SWITCH:
-                    SwitchConfigureImp switchPreference = new SwitchConfigureImp(this);
+                    SwitchConfigureImp switchPreference = new SwitchConfigureImp(mContext);
+                    switchPreference.setListener(this);
                     switchPreference.setKey(childEntity.getKey());
                     switchPreference.setTitle(childEntity.getTitle());
                     switchPreference.setSummary(childEntity.getSummary());
@@ -180,7 +210,8 @@ public class ConfigureActivity extends PreferenceActivity {
                     preferences.append(i, switchPreference);
                     break;
                 case ConfigureType.EDITOR:
-                    EditTextConfigureImp editTextPreference = new EditTextConfigureImp(this);
+                    EditTextConfigureImp editTextPreference = new EditTextConfigureImp(mContext);
+                    editTextPreference.setListener(this);
                     editTextPreference.setKey(childEntity.getKey());
                     editTextPreference.setTitle(childEntity.getTitle());
                     editTextPreference.setSummary(childEntity.getSummary());
@@ -196,64 +227,107 @@ public class ConfigureActivity extends PreferenceActivity {
         return preferences;
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        for (int i = 0; i < preferences.size(); i++) {
-            getPreferenceScreen().addItemFromInflater(preferences.get(i));
+
+
+    public void getListView(Bundle state, ConfigureScreenEntity preferenceScreen) {
+        if (mListView != null) {
+            mListView.setAdapter(null);
         }
-        ((BaseAdapter) getPreferenceScreen().getRootAdapter()).notifyDataSetChanged();
+
+        LayoutInflater inflater = (LayoutInflater)
+                mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View childPrefScreen = inflater.inflate(
+                R.layout.preference_list_fragment, null);
+        mListView = (ListView) childPrefScreen.findViewById(R.id.list);
+        bind(mListView);
+        addView(mListView,-1,-1);
+
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        for (int i = 0; i < preferences.size(); i++) {
+            preferences.get(i).dispatchSetInitialValue();
+        }
     }
 
     /**
-     * Low-level function for instantiating by name. This attempts to
-     * instantiate class of the given <var>name</var> found in this
-     * inflater's ClassLoader.
-     * <p/>
-     * <p/>
-     * There are two things that can happen in an error case: either the
-     * exception describing the error will be thrown, or a null will be
-     * returned. You must deal with both possibilities -- the former will happen
-     * the first time createItem() is called for a class of a particular name,
-     * the latter every time there-after for that class name.
+     * Binds a {@link ListView} to the preferences contained in this {@link PreferenceScreen} via
+     * {@link #getRootAdapter()}. It also handles passing list item clicks to the corresponding
+     * {@link Preference} contained by this {@link PreferenceScreen}.
      *
-     * @param name  The full name of the class to be instantiated.
-     * @param attrs The XML attributes supplied for this instance.
-     * @return The newly instantied item, or null.
+     * @param listView The list view to attach to.
      */
-    public final PreferenceScreen createPreferenceScreen(String name, String prefix, Context context,AttributeSet attrs){
-        Class[] mConstructorSignature = new Class[]{
-                Context.class, AttributeSet.class};
-
-        final Object[] mConstructorArgs = new Object[2];
-        try {
-            Constructor constructor = null;
-            Class clazz = getClassLoader().loadClass(
-                    prefix != null ? (prefix + name) : name);
-            constructor = clazz.getConstructor(mConstructorSignature);
-            constructor.setAccessible(true);
-            Object[] args = mConstructorArgs;
-            args[0] = context;
-            args[1] = attrs;
-            return (PreferenceScreen) constructor.newInstance(args);
-
-        } catch (NoSuchMethodException e) {
-            InflateException ie = new InflateException(attrs
-                    .getPositionDescription()
-                    + ": Error inflating class "
-                    + (prefix != null ? (prefix + name) : name));
-            ie.initCause(e);
-            throw ie;
-
-        } catch (ClassNotFoundException e) {
-            // If loadClass fails, we should propagate the exception.
-        } catch (Exception e) {
-            InflateException ie = new InflateException(attrs
-                    .getPositionDescription()
-                    + ": Error inflating class "
-                    + name);
-            ie.initCause(e);
+    public void bind(ListView listView) {
+        listView.setOnItemClickListener(this);
+        if (mRootAdapter == null) {
+            mRootAdapter = getRootAdapter();
+            listView.setAdapter(mRootAdapter);
         }
-        return null;
+        mRootAdapter.changeData(preferences);
+
+//        onAttachedToActivity();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        // If the list has headers, subtract them from the index.
+        if (parent instanceof ListView) {
+            position -= ((ListView) parent).getHeaderViewsCount();
+        }
+        Object item = getRootAdapter().getItem(position);
+        if (!(item instanceof ConfigureImp)) return;
+
+        final ConfigureImp preference = (ConfigureImp) item;
+        preference.performClick();
+    }
+
+
+    public ConfigureAdapter getRootAdapter() {
+        if (mRootAdapter == null) {
+            mRootAdapter = onCreateRootAdapter();
+        }
+
+        return mRootAdapter;
+    }
+
+    protected ConfigureAdapter onCreateRootAdapter() {
+        return new ConfigureAdapter(mContext) {
+        };
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+
+    }
+
+    @Override
+    public void onPreferenceChange(Preference preference) {
+        if (mRootAdapter!=null) {
+            mRootAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        Log.i("ConfigureFrame","dispatchKeyEvent = "+event.getKeyCode());
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+            if (getChildCount() >= 1) {
+                this.removeViewAt(getChildCount()-1);
+            }
+        }
+        return super.dispatchKeyEvent(event);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        Log.i("ConfigureFrame","onKeyDown = "+event.getKeyCode());
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (getChildCount() >= 1) {
+                this.removeViewAt(getChildCount()-1);
+            }
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

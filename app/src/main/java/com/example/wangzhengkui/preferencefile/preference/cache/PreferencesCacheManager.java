@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.wangzhengkui.preferencefile.cache;
+package com.example.wangzhengkui.preferencefile.preference.cache;
 
 import android.content.Context;
 import android.content.SharedPreferences;

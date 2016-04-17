@@ -10,13 +10,19 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     >
 
-    <ListView
+    <!--<ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:dividerHeight="0px"/>
+        android:dividerHeight="0px"/>-->
     <Switch
+        android:id="@+id/switchId"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        />
+    <FrameLayout
+        android:id="@+id/frameLv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </RelativeLayout>

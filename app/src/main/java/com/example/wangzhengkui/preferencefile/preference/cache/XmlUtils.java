@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package com.example.wangzhengkui.preferencefile.cache;
+package com.example.wangzhengkui.preferencefile.preference.cache;
 
-import android.util.Base64;
 import android.util.Xml;
 
 import org.xmlpull.v1.XmlPullParser;

@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.res.TypedArray;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.preference.DialogPreference;
 import android.support.annotation.ArrayRes;
 import android.util.AttributeSet;
 
@@ -16,18 +15,18 @@ import java.util.Set;
 /**
  * @author Administrator on 2016-04-15 21:03
  */
-public class MultiSelectListPreferenceImp extends DialogPreferenceImp {
+public class MultiSelectListConfigureImp extends DialogConfigureImp {
     Context mContext;
     private CharSequence[] mEntries;
     private CharSequence[] mEntryValues;
     private Set<String> mValues = new HashSet<String>();
     private Set<String> mNewValues = new HashSet<String>();
     private boolean mPreferenceChanged;
-    public MultiSelectListPreferenceImp(Context context) {
+    public MultiSelectListConfigureImp(Context context) {
         this(context,null);
     }
 
-    public MultiSelectListPreferenceImp(Context context, AttributeSet attrs) {
+    public MultiSelectListConfigureImp(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.mContext = context;
     }

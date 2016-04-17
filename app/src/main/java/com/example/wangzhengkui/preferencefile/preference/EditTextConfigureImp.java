@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.preference.EditTextPreference;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
@@ -18,7 +17,7 @@ import com.example.wangzhengkui.preferencefile.R;
 /**
  * @author Administrator on 2016-04-15 20:16
  */
-public class EditTextPreferenceImp extends DialogPreferenceImp {
+public class EditTextConfigureImp extends DialogConfigureImp {
     Context mContext;
     /**
      * The edit text shown in the dialog.
@@ -26,11 +25,11 @@ public class EditTextPreferenceImp extends DialogPreferenceImp {
     private EditText mEditText;
 
     private String mText;
-    public EditTextPreferenceImp(Context context) {
-        this(context,null);
+    public EditTextConfigureImp(Context context) {
+        this(context, null);
     }
 
-    public EditTextPreferenceImp(Context context, AttributeSet attrs) {
+    public EditTextConfigureImp(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.mContext = context;
 
@@ -122,8 +121,9 @@ public class EditTextPreferenceImp extends DialogPreferenceImp {
     }
 
     @Override
-    protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
+    public void setInitialValue(boolean restoreValue, Object defaultValue) {
         setText(restoreValue ? getPersistedString(mText) : (String) defaultValue);
+        setSummary(String.valueOf(defaultValue));
     }
 
     @Override

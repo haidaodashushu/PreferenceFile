@@ -4,17 +4,11 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
-import android.preference.TwoStatePreference;
-import android.support.annotation.StringRes;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Checkable;
-import android.widget.CompoundButton;
-import android.widget.Switch;
-import android.widget.TextView;
 
 import com.example.wangzhengkui.preferencefile.R;
 
@@ -22,7 +16,7 @@ import com.example.wangzhengkui.preferencefile.R;
  * @author Administrator on 2016-04-15 11:45
  */
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-public class SwitchPreferenceImp extends PreferenceImp {
+public class SwitchConfigureImp extends ConfigureImp {
     // Switch text for on and off states
     Context mContext;
     boolean mChecked;
@@ -34,7 +28,7 @@ public class SwitchPreferenceImp extends PreferenceImp {
      * @param context The Context that will style this preference
      * @param attrs Style attributes that differ from the default
      */
-    public SwitchPreferenceImp(Context context, AttributeSet attrs) {
+    public SwitchConfigureImp(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.mContext = context;
     }
@@ -44,7 +38,7 @@ public class SwitchPreferenceImp extends PreferenceImp {
      *
      * @param context The Context that will style this preference
      */
-    public SwitchPreferenceImp(Context context) {
+    public SwitchConfigureImp(Context context) {
         this(context, null);
     }
 
@@ -52,13 +46,13 @@ public class SwitchPreferenceImp extends PreferenceImp {
     protected void onClick() {
         super.onClick();
         final boolean newValue = !isChecked();
-        if (callChangeListener(newValue)) {
+//        if (callChangeListener(newValue)) {
             setChecked(newValue);
-        }
+//        }
     }
 
     @Override
-    protected View onCreateView(ViewGroup parent) {
+    public View onCreateView(ViewGroup parent) {
         super.onCreateView(parent);
         final LayoutInflater layoutInflater =
                 (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -74,7 +68,7 @@ public class SwitchPreferenceImp extends PreferenceImp {
     }
 
     @Override
-    protected void onBindView(View view) {
+    public void onBindView(View view) {
         super.onBindView(view);
         View checkableView = view.findViewById(R.id.switchWidget);
         if (checkableView != null && checkableView instanceof Checkable) {

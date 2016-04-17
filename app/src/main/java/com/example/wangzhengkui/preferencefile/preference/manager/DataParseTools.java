@@ -1,12 +1,12 @@
-package com.example.wangzhengkui.preferencefile.manager;
+package com.example.wangzhengkui.preferencefile.preference.manager;
 
 import android.text.TextUtils;
 
-import com.example.wangzhengkui.preferencefile.entity.ConfigureEntity;
-import com.example.wangzhengkui.preferencefile.entity.ConfigureListEntity;
-import com.example.wangzhengkui.preferencefile.entity.ConfigureScreenEntity;
-import com.example.wangzhengkui.preferencefile.entity.ConfigureType;
-import com.example.wangzhengkui.preferencefile.entity.Constants;
+import com.example.wangzhengkui.preferencefile.preference.entity.ConfigureEntity;
+import com.example.wangzhengkui.preferencefile.preference.entity.ConfigureListEntity;
+import com.example.wangzhengkui.preferencefile.preference.entity.ConfigureScreenEntity;
+import com.example.wangzhengkui.preferencefile.preference.entity.ConfigureType;
+import com.example.wangzhengkui.preferencefile.preference.entity.Constants;
 
 import org.json.JSONArray;
 import org.json.JSONException;

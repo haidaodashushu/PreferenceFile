@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.res.TypedArray;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.preference.ListPreference;
 import android.support.annotation.ArrayRes;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -14,7 +13,7 @@ import android.util.AttributeSet;
 /**
  * @author Administrator on 2016-04-15 19:47
  */
-public class ListPreferenceImp extends DialogPreferenceImp {
+public class ListConfigureImp extends DialogConfigureImp {
     Context mContext;
     private CharSequence[] mEntries;
     private CharSequence[] mEntryValues;
@@ -23,11 +22,11 @@ public class ListPreferenceImp extends DialogPreferenceImp {
     private int mClickedDialogEntryIndex;
     private boolean mValueSet;
 
-    public ListPreferenceImp(Context context) {
+    public ListConfigureImp(Context context) {
         this(context,null);
     }
 
-    public ListPreferenceImp(Context context, AttributeSet attrs) {
+    public ListConfigureImp(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.mContext = context;
     }
@@ -218,7 +217,7 @@ public class ListPreferenceImp extends DialogPreferenceImp {
                          * Clicking on an item simulates the positive button
                          * click, and dismisses the dialog.
                          */
-                        ListPreferenceImp.this.onClick(dialog, DialogInterface.BUTTON_POSITIVE);
+                        ListConfigureImp.this.onClick(dialog, DialogInterface.BUTTON_POSITIVE);
                         dialog.dismiss();
                     }
                 });

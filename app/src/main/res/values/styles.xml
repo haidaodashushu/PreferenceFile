@@ -7,5 +7,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
-
+    <style name="ConfigureDialog_Transparent_FullScreen" parent="AppTheme">
+            <item name="android:windowAnimationStyle">@android:style/Animation.Activity</item>
+    </style>
 </resources>

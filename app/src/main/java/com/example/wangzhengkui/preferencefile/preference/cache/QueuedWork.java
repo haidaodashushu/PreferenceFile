@@ -1,4 +1,4 @@
-package com.example.wangzhengkui.preferencefile.cache;
+package com.example.wangzhengkui.preferencefile.preference.cache;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;

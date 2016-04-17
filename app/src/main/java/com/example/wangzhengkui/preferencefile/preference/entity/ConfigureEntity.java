@@ -1,4 +1,4 @@
-package com.example.wangzhengkui.preferencefile.entity;
+package com.example.wangzhengkui.preferencefile.preference.entity;
 
 /**
  * @author Administrator on 2016-04-11 21:31

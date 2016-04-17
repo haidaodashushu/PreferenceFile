@@ -1,4 +1,4 @@
-package com.example.wangzhengkui.preferencefile.entity;
+package com.example.wangzhengkui.preferencefile.preference.entity;
 
 import java.util.LinkedList;
 

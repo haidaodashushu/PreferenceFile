@@ -1,7 +1,6 @@
 package com.example.wangzhengkui.preferencefile.preference;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
@@ -13,26 +12,65 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.wangzhengkui.preferencefile.R;
-import com.example.wangzhengkui.preferencefile.manager.ConfigureManager;
+import com.example.wangzhengkui.preferencefile.preference.manager.ConfigureManager;
 
 import java.util.Set;
 
 /**
  * @author Administrator on 2016-04-15 17:52
  */
-public class PreferenceImp extends Preference {
+public class ConfigureImp extends Preference {
     Context mContext;
-    public PreferenceImp(Context context) {
+    private Object mDefaultValue;
+    OnPreferenceChangeInternalListener listener;
+    public ConfigureImp(Context context) {
         this(context,null);
     }
 
-    public PreferenceImp(Context context, AttributeSet attrs) {
+    public ConfigureImp(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.mContext = context;
     }
 
+    /**
+     * 代码来自于Preference.performCLick()
+     */
+    public void performClick() {
+
+        if (!isEnabled()) {
+            return;
+        }
+
+        onClick();
+
+        if (getOnPreferenceClickListener() != null && getOnPreferenceClickListener().onPreferenceClick(this)) {
+            return;
+        }
+        if (getIntent() != null) {
+            Context context = getContext();
+            context.startActivity(getIntent());
+        }
+    }
+
     @Override
-    protected View onCreateView(ViewGroup parent) {
+    protected void notifyChanged() {
+        super.notifyChanged();
+        if (listener != null) {
+            listener.onPreferenceChange(this);
+        }
+    }
+
+    public OnPreferenceChangeInternalListener getListener() {
+        return listener;
+    }
+
+    public ConfigureImp setListener(OnPreferenceChangeInternalListener listener) {
+        this.listener = listener;
+        return this;
+    }
+
+    @Override
+    public View onCreateView(ViewGroup parent) {
         super.onCreateView(parent);
         final LayoutInflater layoutInflater =
                 (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -40,7 +78,7 @@ public class PreferenceImp extends Preference {
     }
 
     @Override
-    protected void onBindView(View view) {
+    public void onBindView(View view) {
         super.onBindView(view);
         final TextView titleView = (TextView) view.findViewById(R.id.title);
         if (titleView != null) {
@@ -110,7 +148,25 @@ public class PreferenceImp extends Preference {
         }
     }
 
+    @Override
+    public void setDefaultValue(Object defaultValue) {
+        super.setDefaultValue(defaultValue);
+        mDefaultValue = defaultValue;
+    }
 
+    protected void dispatchSetInitialValue() {
+        final boolean shouldPersist = shouldPersist();
+        if (!shouldPersist || !getSharedPreferences().contains(getKey())) {
+            if (mDefaultValue != null) {
+                setInitialValue(false, mDefaultValue);
+            }
+        } else {
+            setInitialValue(true, null);
+        }
+    }
+    public void setInitialValue(boolean restorePersistedValue, Object defaultValue) {
+
+    }
     @Override
     public boolean persistBoolean(boolean value) {
 //        return false;
@@ -218,5 +274,14 @@ public class PreferenceImp extends Preference {
     public boolean persist(String key,Object value) {
         ConfigureManager.writeCacheValue(key,value.toString());
         return true;
+    }
+
+    interface OnPreferenceChangeInternalListener {
+        /**
+         * Called when this Preference has changed.
+         *
+         * @param preference This preference.
+         */
+        void onPreferenceChange(Preference preference);
     }
 }

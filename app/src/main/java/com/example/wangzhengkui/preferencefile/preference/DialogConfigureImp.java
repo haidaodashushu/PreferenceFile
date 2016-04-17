@@ -28,7 +28,7 @@ import com.example.wangzhengkui.preferencefile.R;
 /**
  * @author Administrator on 2016-04-15 19:55
  */
-public class DialogPreferenceImp extends PreferenceImp implements
+public class DialogConfigureImp extends ConfigureImp implements
         DialogInterface.OnClickListener, DialogInterface.OnDismissListener,
         PreferenceManager.OnActivityDestroyListener{
     Context mContext;
@@ -46,11 +46,11 @@ public class DialogPreferenceImp extends PreferenceImp implements
 
     /** Which button was clicked. */
     private int mWhichButtonClicked;
-    public DialogPreferenceImp(Context context) {
+    public DialogConfigureImp(Context context) {
         this(context,null);
     }
 
-    public DialogPreferenceImp(Context context, AttributeSet attrs) {
+    public DialogConfigureImp(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.mContext = context;
         mDialogLayoutResId = R.layout.preference_dialog;
