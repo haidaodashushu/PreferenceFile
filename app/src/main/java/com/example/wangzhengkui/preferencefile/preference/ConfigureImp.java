@@ -2,8 +2,10 @@ package com.example.wangzhengkui.preferencefile.preference;
 
 import android.content.Context;
 import android.preference.Preference;
+import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -13,8 +15,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.wangzhengkui.preferencefile.R;
+import com.example.wangzhengkui.preferencefile.preference.entity.ConfigureEntity;
 import com.example.wangzhengkui.preferencefile.preference.manager.ConfigureManager;
 
+import org.json.JSONArray;
+
+import java.util.Iterator;
 import java.util.Set;
 
 /**
@@ -24,6 +30,7 @@ public class ConfigureImp extends Preference {
     Context mContext;
     private Object mDefaultValue;
     OnPreferenceChangeInternalListener listener;
+    Object value ;
     public ConfigureImp(Context context) {
         this(context,null);
     }
@@ -149,23 +156,36 @@ public class ConfigureImp extends Preference {
         }
     }
 
+    public Object getValue() {
+        return value;
+    }
+
+    public void setValue(Object value) {
+        this.value = value;
+    }
+
     @Override
     public void setDefaultValue(Object defaultValue) {
         super.setDefaultValue(defaultValue);
         mDefaultValue = defaultValue;
     }
 
+    /**
+     * 该方法将在ConfigureFrame中调用
+     * 设置初始值，会将value设置进去
+     */
     protected void dispatchSetInitialValue() {
-        final boolean shouldPersist = shouldPersist();
-        if (!shouldPersist || !getSharedPreferences().contains(getKey())) {
+        setInitialValue(value);
+        /*final boolean shouldPersist = shouldPersist();
+        if (!shouldPersist ) {
             if (mDefaultValue != null) {
                 setInitialValue(false, mDefaultValue);
             }
         } else {
-            setInitialValue(true, null);
-        }
+            setInitialValue(true, mDefaultValue);
+        }*/
     }
-    public void setInitialValue(boolean restorePersistedValue, Object defaultValue) {
+    public void setInitialValue(Object value) {
 
     }
     @Override
@@ -233,7 +253,18 @@ public class ConfigureImp extends Preference {
      * @hide Pending API approval
      */
     protected boolean persistStringSet(Set<String> values) {
+        Iterator<String> iterator = values.iterator();
+        StringBuilder value = new StringBuilder();
+//        JSONArray array = new JSONArray();
+        while (iterator.hasNext()) {
+//            array.put(iterator.next());
+            value.append(iterator.next()+",");
+        }
 
+        if (value.toString().endsWith(",")) {
+            value.deleteCharAt(value.length()-1);
+        }
+        persist(getKey(),value.toString());
         return false;
     }
 
@@ -256,20 +287,6 @@ public class ConfigureImp extends Preference {
     protected Set<String> getPersistedStringSet(Set<String> defaultReturnValue) {
         return null;
     }
-    @Override
-    public boolean shouldPersist() {
-        return super.shouldPersist();
-    }
-
-    @Override
-    public boolean isPersistent() {
-        return super.isPersistent();
-    }
-
-    @Override
-    public void setPersistent(boolean persistent) {
-        super.setPersistent(persistent);
-    }
 
 
     public boolean persist(String key,Object value) {
@@ -285,4 +302,6 @@ public class ConfigureImp extends Preference {
          */
         void onPreferenceChange(Preference preference);
     }
+
+
 }

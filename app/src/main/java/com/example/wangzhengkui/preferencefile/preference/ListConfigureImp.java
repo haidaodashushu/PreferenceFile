@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.content.res.TypedArray;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.preference.EditTextPreference;
+import android.preference.ListPreference;
 import android.support.annotation.ArrayRes;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -17,7 +19,7 @@ public class ListConfigureImp extends DialogConfigureImp {
     Context mContext;
     private CharSequence[] mEntries;
     private CharSequence[] mEntryValues;
-    private String mValue;
+//    private String mValue;
     private String mSummary;
     private int mClickedDialogEntryIndex;
     private boolean mValueSet;
@@ -95,7 +97,7 @@ public class ListConfigureImp extends DialogConfigureImp {
      * {@link #getEntryValues()}.
      *
      * @param value The value to set for the key.
-     */
+     *//*
     public void setValue(String value) {
         // Always persist/notify the first time.
         final boolean changed = !TextUtils.equals(mValue, value);
@@ -107,7 +109,7 @@ public class ListConfigureImp extends DialogConfigureImp {
                 notifyChanged();
             }
         }
-    }
+    }*/
 
     /**
      * Returns the summary of this ListPreference. If the summary
@@ -158,16 +160,6 @@ public class ListConfigureImp extends DialogConfigureImp {
     }
 
     /**
-     * Returns the value of the key. This should be one of the entries in
-     * {@link #getEntryValues()}.
-     *
-     * @return The value of the key.
-     */
-    public String getValue() {
-        return mValue;
-    }
-
-    /**
      * Returns the entry corresponding to the current value.
      *
      * @return The entry corresponding to the current value, or null.
@@ -183,7 +175,7 @@ public class ListConfigureImp extends DialogConfigureImp {
      * @param value The value whose index should be returned.
      * @return The index of the value, or -1 if not found.
      */
-    public int findIndexOfValue(String value) {
+    public int findIndexOfValue(Object value) {
         if (value != null && mEntryValues != null) {
             for (int i = mEntryValues.length - 1; i >= 0; i--) {
                 if (mEntryValues[i].equals(value)) {
@@ -195,7 +187,7 @@ public class ListConfigureImp extends DialogConfigureImp {
     }
 
     private int getValueIndex() {
-        return findIndexOfValue(mValue);
+        return findIndexOfValue(value);
     }
 
     @Override
@@ -247,9 +239,29 @@ public class ListConfigureImp extends DialogConfigureImp {
         return a.getString(index);
     }
 
+    /**
+     * Sets the value of the key. This should be one of the entries in
+     * {@link #getEntryValues()}.
+     *
+     * @param value The value to set for the key.
+     */
+    public void setValue(Object value) {
+        // Always persist/notify the first time.
+        final boolean changed = !TextUtils.equals(this.value==null?null:this.value.toString(), value==null?null:value.toString());
+        if (value!=null&&(changed || !mValueSet)) {
+            this.value = value;
+            mValueSet = true;
+            persistString(value.toString());
+            if (changed) {
+                notifyChanged();
+            }
+        }
+    }
     @Override
-    protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
-        setValue(restoreValue ? getPersistedString(mValue) : (String) defaultValue);
+    public void setInitialValue(Object value) {
+        if (value != null) {
+            setSummary(value.toString());
+        }
     }
 
     @Override
@@ -261,7 +273,7 @@ public class ListConfigureImp extends DialogConfigureImp {
         }
 
         final SavedState myState = new SavedState(superState);
-        myState.value = getValue();
+        myState.value = getValue().toString();
         return myState;
     }
 
@@ -275,7 +287,7 @@ public class ListConfigureImp extends DialogConfigureImp {
 
         SavedState myState = (SavedState) state;
         super.onRestoreInstanceState(myState.getSuperState());
-        setValue(myState.value);
+        setInitialValue(myState.value);
     }
     private static class SavedState extends BaseSavedState {
         String value;

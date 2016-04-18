@@ -120,10 +120,9 @@ public class EditTextConfigureImp extends DialogConfigureImp {
         return a.getString(index);
     }
 
-    @Override
-    public void setInitialValue(boolean restoreValue, Object defaultValue) {
-        setText(restoreValue ? getPersistedString(mText) : (String) defaultValue);
-        setSummary(String.valueOf(defaultValue));
+    public void setInitialValue(Object value) {
+        setText(String.valueOf(value));
+        setSummary(String.valueOf(value));
     }
 
     @Override

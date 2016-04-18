@@ -104,9 +104,9 @@ public class SwitchConfigureImp extends ConfigureImp {
     public boolean isChecked() {
         return mChecked;
     }
-    /*@Override
-    protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
-        setChecked(restoreValue ? getPersistedBoolean(isChecked())
-                : Boolean.parseBoolean(defaultValue.toString()));
-    }*/
+
+    @Override
+    public void setInitialValue(Object value) {
+        setChecked(Boolean.parseBoolean(value.toString()));
+    }
 }

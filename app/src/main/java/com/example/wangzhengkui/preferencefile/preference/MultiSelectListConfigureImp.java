@@ -9,7 +9,11 @@ import android.os.Parcelable;
 import android.support.annotation.ArrayRes;
 import android.util.AttributeSet;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 /**
@@ -170,7 +174,14 @@ public class MultiSelectListConfigureImp extends DialogConfigureImp {
 
         if (positiveResult && mPreferenceChanged) {
             final Set<String> values = mNewValues;
-            if (callChangeListener(values)) {
+            String value = "";
+            for (String value1 : values) {
+                value+=value1+",";
+            }
+            if (value.endsWith(",")) {
+                value = value.substring(0,value.length()-1);
+            }
+            if (callChangeListener(value)) {
                 setValues(values);
             }
         }
@@ -191,9 +202,23 @@ public class MultiSelectListConfigureImp extends DialogConfigureImp {
     }
 
     @Override
-    protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
-        setValues(restoreValue ? getPersistedStringSet(mValues) : (Set<String>) defaultValue);
+    public void setValue(Object value) {
+        super.setValue(value);
     }
+    public Set<String> string2Set(String value) {
+        Set<String> values = new HashSet<>();
+        String[] spilt = value.split(",");
+        for (int i = 0; i < spilt.length; i++) {
+            values.add(spilt[i]);
+        }
+        return values;
+    }
+    @Override
+    public void setInitialValue(Object value) {
+        setValues(string2Set(value.toString()));
+        setSummary(value.toString());
+    }
+
 
     @Override
     protected Parcelable onSaveInstanceState() {

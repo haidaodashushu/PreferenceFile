@@ -20,11 +20,14 @@ import android.util.SparseArray;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import com.example.wangzhengkui.preferencefile.R;
+import com.example.wangzhengkui.preferencefile.SlideConfig;
+import com.example.wangzhengkui.preferencefile.SlideFrame;
 import com.example.wangzhengkui.preferencefile.preference.adapter.ConfigureAdapter;
 import com.example.wangzhengkui.preferencefile.preference.entity.ConfigureEntity;
 import com.example.wangzhengkui.preferencefile.preference.entity.ConfigureListEntity;
@@ -88,9 +91,33 @@ public class ConfigureFrame extends FrameLayout implements
                 }
 
             } else if (preference instanceof ScreenConfigureImp) {
-                ConfigureFrame dialog = new ConfigureFrame(mContext,configureFrameParent);
-                dialog.getConfigure(preference.getKey());
-                configureFrameParent.addView(dialog);
+                ConfigureFrame contentView = new ConfigureFrame(mContext,configureFrameParent);
+                contentView.getConfigure(preference.getKey());
+                contentView.setId(R.id.slide_content);
+
+                final SlideConfig config = new SlideConfig.Builder()
+                        .setSensitivity(1)
+                        .setEdgeDirect(1<<0)
+                        .setEdgeOnly(false)
+                        .setDistanceForRelease(0.4f)
+                        .setMinVelocity(2000)
+                        .setOnFrameSlideListener(new SlideFrame.OnSimpleFrameSlideListener(){
+                            @Override
+                            public void onOpened() {
+                                configureFrameParent.onBack();
+                            }
+                        }).build();
+
+                SlideFrame slideFrame = new SlideFrame(mContext,config,contentView);
+                slideFrame.setId(R.id.slide_frame);
+
+                AlphaAnimation alphaAnimation = new AlphaAnimation(0, 1);
+                alphaAnimation.setDuration(300);
+                slideFrame.setAnimation(alphaAnimation);
+                alphaAnimation.start();
+
+
+                configureFrameParent.addView(slideFrame);
             } else {
                 // For all other preferences, set the summary to the value's
                 // simple string representation.
@@ -116,6 +143,10 @@ public class ConfigureFrame extends FrameLayout implements
         setFocusable(true);
     }
 
+    /**
+     * @param key
+     * @return
+     */
     ConfigureFrame getConfigure(String key) {
         screenEntity = null;
         if (key == null) {
@@ -174,6 +205,7 @@ public class ConfigureFrame extends FrameLayout implements
             }
 
             configureImp.setListener(this);
+            configureImp.setValue(childEntity.getValue());
             configureImp.setKey(childEntity.getKey());
             configureImp.setTitle(childEntity.getTitle());
             configureImp.setSummary(childEntity.getSummary());
@@ -267,27 +299,5 @@ public class ConfigureFrame extends FrameLayout implements
         if (mRootAdapter!=null) {
             mRootAdapter.notifyDataSetChanged();
         }
-    }
-
-    @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
-        Log.i("ConfigureFrame","dispatchKeyEvent = "+event.getKeyCode());
-        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
-            if (getChildCount() >= 1) {
-                this.removeViewAt(getChildCount()-1);
-            }
-        }
-        return super.dispatchKeyEvent(event);
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        Log.i("ConfigureFrame","onKeyDown = "+event.getKeyCode());
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (getChildCount() >= 1) {
-                this.removeViewAt(getChildCount()-1);
-            }
-        }
-        return super.onKeyDown(keyCode, event);
     }
 }
