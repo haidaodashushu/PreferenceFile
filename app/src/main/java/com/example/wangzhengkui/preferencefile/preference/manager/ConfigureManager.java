@@ -12,6 +12,8 @@ import com.example.wangzhengkui.preferencefile.preference.entity.Constants;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map.Entry;
@@ -86,16 +88,23 @@ public class ConfigureManager {
      * @param key
      * @return
      */
-    public static String getValue(String key) {
+    public static Object getValue(Object keyObj) {
 
-        if (TextUtils.isEmpty(key)) {
+        if (keyObj == null) {
             return null;
         }
         //realse
         if (TextUtils.equals(Constants.mode, RELEASE)) {
-            return key;
+            return keyObj;
         }
         //debug
+        String key = null;
+        if(keyObj instanceof String) {
+            key = (String) keyObj;
+        }
+        if(keyObj.getClass()==String[].class){
+            key = ((String[])keyObj)[0];
+        }
         String cacheValue = readCacheValue(key);
         //有缓存值 直接返回
         if (!EMPTY.equals(cacheValue)) {
@@ -104,6 +113,9 @@ public class ConfigureManager {
            return parseData(key);
         }
     }
+
+
+
 
     /**
      * 从SharePreferences缓存中读取value

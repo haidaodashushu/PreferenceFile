@@ -115,7 +115,7 @@ public class DataParseTools {
         entity.setType(type);
         entity.setSummary(jsonObject.optString(ConfigureManager.SUMMARY));
         entity.setDefaultValue(jsonObject.opt(ConfigureManager.DEFAULT_VALUE));
-        String cacheValue = ConfigureManager.getValue(key);
+        String cacheValue = (String) ConfigureManager.getValue(key);
         if(TextUtils.equals(ConfigureManager.EMPTY, cacheValue)) {
             cacheValue = (String) jsonObject.opt(ConfigureManager.DEFAULT_VALUE);
         }
