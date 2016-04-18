@@ -57,6 +57,7 @@ public class ConfigureManager {
             return null;
         }
         HashMap<String, String> maps = DataParseTools.parseJson();
+        maps.put(VERSION,Constants.version);
         writeCacheValueNotExist(maps);
         return maps.get(key);
     }
@@ -85,7 +86,7 @@ public class ConfigureManager {
 
     /**
      *返回相对应的value值  现在SharePreferences找，找不到 则解析json字符串去获取
-     * @param key
+     * @param keyObj
      * @return
      */
     public static Object getValue(Object keyObj) {
