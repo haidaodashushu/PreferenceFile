@@ -20,6 +20,12 @@ import java.util.LinkedList;
  * @author Administrator on 2016-04-12 10:40
  */
 public class DataParseTools {
+    /***
+     * 解析json  得到当前screen实体
+     * @param key
+     * @param jsonObject
+     * @return
+     */
     public static ConfigureEntity parseData(String key, JSONObject jsonObject) {
         ConfigureEntity entity = null;
         //读取第一屏的数据
@@ -62,6 +68,12 @@ public class DataParseTools {
         return entity;
     }
 
+    /***
+     * 解析json 得到相对应的item实体
+     * @param key
+     * @param jsonObject
+     * @return
+     */
     public static ConfigureEntity parseEntity(String key, JSONObject jsonObject) {
         String type = jsonObject.optString(ConfigureManager.TYPE);
         ConfigureEntity entity = null;
@@ -128,11 +140,11 @@ public class DataParseTools {
     }
 
     /***
-     * 解析screen项
+     * 解析screen项 保存该screen所有的key value值
      * @param key
      * @param jsonObject
      */
-    public static void parseScreenData(String key, JSONObject jsonObject, HashMap<String, String> hashMap) {
+    private static void parseScreenData(String key, JSONObject jsonObject, HashMap<String, String> hashMap) {
         ConfigureEntity entity = null;
         //读取第一屏的数据
         Iterator<String> keys = jsonObject.keys();
@@ -166,7 +178,7 @@ public class DataParseTools {
      * @param key
      * @return
      */
-    public static boolean isItem(String key) {
+    private  static boolean isItem(String key) {
         if ("type".equals(key)) {
            return false;
         } else if ("value".equals(key)) {
@@ -181,11 +193,11 @@ public class DataParseTools {
     }
 
     /***
-     * 解析item项
+     * 解析item项 获取key value值
      * @param key
      * @param jsonObject
      */
-    public static void parseItemEntity(String key, JSONObject jsonObject, HashMap<String, String> hashMap) {
+    private static void parseItemEntity(String key, JSONObject jsonObject, HashMap<String, String> hashMap) {
         String type = jsonObject.optString(ConfigureManager.TYPE);
         switch (type) {
             case ConfigureType.SCREEN:
@@ -207,6 +219,11 @@ public class DataParseTools {
     }
 
 
+    /***
+     * 获取对应selectedKey的screen实体
+     * @param key
+     * @return
+     */
     public static ConfigureEntity getScreen(String key) {
         try {
             JSONObject object = new JSONObject(Constants.jsonDate);
@@ -222,7 +239,14 @@ public class DataParseTools {
     }
 
 
-    public static ConfigureEntity parseScreenData(String key,String selectedKey, JSONObject jsonObject) {
+    /***
+     *
+     * @param key  当前screen的key值
+     * @param selectedKey 选择的screen的key值
+     * @param jsonObject  当前screen的jsonObject
+     * @return 对应selectedKey的screen实体
+     */
+    private static ConfigureEntity parseScreenData(String key,String selectedKey, JSONObject jsonObject) {
         ConfigureEntity entity = null;
         //读取第一屏的数据
         Iterator<String> keys = jsonObject.keys();
@@ -275,6 +299,12 @@ public class DataParseTools {
         }
     }
 
+    /***
+     * 设置实体
+     * @param entity
+     * @param key
+     * @param optString
+     */
     private static void setEntity(ConfigureEntity entity,String key, String optString) {
         if ("type".equals(key)) {
             entity.setType(optString);
