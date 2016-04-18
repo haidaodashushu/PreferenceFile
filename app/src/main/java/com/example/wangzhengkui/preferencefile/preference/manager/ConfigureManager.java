@@ -32,23 +32,25 @@ public class ConfigureManager {
     public static final String EMPTY = "  ";
     public static final String RELEASE = "0";
 
-    private static JSONObject dataJson;
-
+    /***
+     * 初始化 如果xml配置版本高于原来的版本 则清除SharePreferences
+     */
     public static void init() {
         String oldVersion = readCacheValue(VERSION);
         if (EMPTY.equals(oldVersion)) {
             writeCacheValue(VERSION, Constants.version);
         } else if (Constants.version.compareTo(oldVersion) > 0) {
-            //配置版本号高于原来的版本号 清除缓存
+            //配置版本号高于原来的版本号 清除SharePreferences
             clearCache();
             writeCacheValue(VERSION, Constants.version);
         }
     }
 
     /***
-     * 将json字符串解析存到缓存
+     * 将json字符串解析，返回对应的value值
+     * 并将还没存在SharePreferences里的key value存到SharePreferences
      */
-    public static String parseData(String key) {
+    private static String parseData(String key) {
         if (TextUtils.isEmpty(key)) {
             return null;
         }
@@ -73,13 +75,14 @@ public class ConfigureManager {
             if (TextUtils.isEmpty(key) || TextUtils.isEmpty(value) || isCacheValue(key)) {
                 continue;
             }
+            //如果key value不为空 且还没有存在SharePreferences  则保存
             editor.putString(key, value);
         }
         editor.commit();
     }
 
     /**
-     *
+     *返回相对应的value值  现在SharePreferences找，找不到 则解析json字符串去获取
      * @param key
      * @return
      */
@@ -103,7 +106,7 @@ public class ConfigureManager {
     }
 
     /**
-     * 从缓存中读取value
+     * 从SharePreferences缓存中读取value
      * @param key
      * @return
      */
@@ -116,7 +119,7 @@ public class ConfigureManager {
     }
 
     /**
-     * 清除所有缓存
+     * 清除SharePreferences所有缓存
      */
     private static void clearCache() {
         PreferencesCacheManager mgr = PreferencesCacheManager.getInstance();
@@ -126,7 +129,7 @@ public class ConfigureManager {
     }
 
     /**
-     * 缓存是否有记录该Key相对于的value值
+     * SharePreferences缓存是否有记录该Key相对应的value值
      * @param key
      * @return
      */
@@ -135,7 +138,7 @@ public class ConfigureManager {
     }
 
     /**
-     * 写缓存
+     * SharePreferences中写缓存
      * @param key
      */
     public static void writeCacheValue(String key, String value) {
@@ -147,7 +150,7 @@ public class ConfigureManager {
 
 
     /**
-     * 返回第一屏幕信息
+     * 返回配置的首页信息
      */
     public static ConfigureScreenEntity getFirstScreen() {
         try {
@@ -160,7 +163,7 @@ public class ConfigureManager {
     }
 
     /**
-     * 保存hashmap记录的key value值到缓存
+     * 保存hashmap中所记录的key value值到SharePreferences缓存
      * @param hashMap
      */
     public static void writeCacheValue(HashMap<String, String> hashMap) {

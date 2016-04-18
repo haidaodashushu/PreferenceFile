@@ -103,75 +103,13 @@ public class DataParseTools {
         entity.setType(type);
         entity.setSummary(jsonObject.optString(ConfigureManager.SUMMARY));
         entity.setDefaultValue(jsonObject.opt(ConfigureManager.DEFAULT_VALUE));
-        entity.setValue(jsonObject.opt(ConfigureManager.DEFAULT_VALUE));
+        String cacheValue = ConfigureManager.getValue(key);
+        if(TextUtils.equals(ConfigureManager.EMPTY, cacheValue)) {
+            cacheValue = (String) jsonObject.opt(ConfigureManager.DEFAULT_VALUE);
+        }
+        entity.setValue(cacheValue);
         return entity;
     }
-
-
-
-   /* public static ConfigureEntity getScreenParseData(String key) {
-        ConfigureEntity entity = null;
-        //读取第一屏的数据
-        JSONObject jsonObject = null;
-        try {
-            jsonObject = new JSONObject(Constants.jsonDate);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        if (jsonObject == null) {
-            return null;
-        }
-        Iterator<String> keys = jsonObject.keys();
-        ConfigureScreenEntity screenEntity = new ConfigureScreenEntity();
-        LinkedList<ConfigureEntity> linkedList = new LinkedList<>();
-        boolean hadFinded = false;
-        try {
-            if (key == null) {
-                //读取第一屏screen的key;
-                while (keys.hasNext()) {
-                    key = keys.next();
-                    screenEntity.setKey(key);
-                }
-                //读取第一屏所对应的json
-                jsonObject = jsonObject.getJSONObject(key);
-                hadFinded = true;
-            }
-            keys = jsonObject.keys();
-            while (keys.hasNext()) {
-                //每个item中，type是必须且肯定存在
-                String childKey = keys.next();
-                if ("type".equals(childKey)) {
-                    screenEntity.setType(jsonObject.optString(childKey));
-                } else if ("value".equals(childKey)) {
-                    screenEntity.setValue(jsonObject.optString(childKey));
-                } else if ("summary".equals(childKey)) {
-                    screenEntity.setSummary(jsonObject.optString(childKey));
-                } else if ("title".equals(childKey)) {
-                    screenEntity.setTitle(jsonObject.optString(childKey));
-                } else {
-                    JSONObject object = jsonObject.getJSONObject(childKey);
-                    String type = jsonObject.optString(ConfigureManager.TYPE);
-                    if (!hadFinded && TextUtils.equals(ConfigureType.SCREEN, type) && TextUtils.equals(childKey, key)) {
-
-                    }
-
-                    switch (type) {
-                        case ConfigureType.SCREEN:
-                            parseScreenData(key, jsonObject, hashMap);
-                            break;
-                    }
-                    ConfigureEntity entity1 = parseEntity(childKey, object);
-                    linkedList.add(entity1);
-                }
-            }
-            screenEntity.setItemList(linkedList);
-            return screenEntity;
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return entity;
-    }
-*/
 
     /***
      * 解析json 得到所有的key value值
