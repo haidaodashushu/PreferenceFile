@@ -2,6 +2,7 @@ package com.example.wangzhengkui.preferencefile.preference;
 
 import android.content.Context;
 import android.preference.Preference;
+import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.AttributeSet;

@@ -1,7 +1,10 @@
 package com.example.wangzhengkui.preferencefile.preference;
 
 import android.content.Context;
+import android.preference.PreferenceCategory;
+import android.text.Layout;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -24,9 +27,12 @@ public class CategoryConfigureImp extends ConfigureImp {
 
     @Override
     public View onCreateView(ViewGroup parent) {
-        View layout = super.onCreateView(parent);
-        View viewById = layout.findViewById(R.id.summary);
-        viewById.setVisibility(View.GONE);
+        super.onCreateView(parent);
+//        View layout = super.onCreateView(parent);
+//        View viewById = layout.findViewById(R.id.summary);
+//        viewById.setVisibility(View.GONE);
+        View layout = LayoutInflater.from(mContext).inflate(R.layout.preference_widget_category,null);
+
         return layout;
     }
 

@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
 import android.widget.FrameLayout;
 
 /**
@@ -12,7 +13,6 @@ import android.widget.FrameLayout;
  */
 public class ConfigureFrameParent extends FrameLayout{
     Context mContext;
-
     public ConfigureFrameParent(Context context) {
         this(context, null);
     }
@@ -21,6 +21,19 @@ public class ConfigureFrameParent extends FrameLayout{
         super(context, attrs);
         this.mContext = context;
         setBackgroundColor(Color.parseColor("#fafafa"));
+
+        setFocusable(true);//这个和下面的这个命令必须要设置了，才能监听back事件。
+        setFocusableInTouchMode(true);
+        /*setOnKeyListener(new OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                Log.i("ConfigureFrameParent", "onKeyDown = " + event.getKeyCode());
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+                }
+                return false;
+            }
+        });*/
     }
 
     public ConfigureFrameParent getConfigure(String key) {
@@ -37,14 +50,16 @@ public class ConfigureFrameParent extends FrameLayout{
         return null;
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        Log.i("ConfigureFrameParent", "onKeyDown = " + event.getKeyCode());
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (getChildCount() >= 1) {
-                this.removeViewAt(getChildCount()-1);
-            }
+    /**
+     * 返回上一层，如果当前层数>1，则返回true,如果当前层数小于等于1,则返回false
+     * @return
+     */
+    public boolean onBack() {
+        if (getChildCount() > 1) {
+            removeViewAt(getChildCount() - 1);
+            return true;
+        } else {
+            return false;
         }
-        return super.onKeyDown(keyCode, event);
     }
 }
