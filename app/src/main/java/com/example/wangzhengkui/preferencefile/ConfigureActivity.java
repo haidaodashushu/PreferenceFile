@@ -22,6 +22,9 @@ import android.util.SparseArray;
 import android.view.InflateException;
 import android.widget.BaseAdapter;
 
+import com.example.wangzhengkui.preferencefile.preference.CategoryConfigureImp;
+import com.example.wangzhengkui.preferencefile.preference.ConfigureImp;
+import com.example.wangzhengkui.preferencefile.preference.MultiSelectListConfigureImp;
 import com.example.wangzhengkui.preferencefile.preference.entity.ConfigureEntity;
 import com.example.wangzhengkui.preferencefile.preference.entity.ConfigureListEntity;
 import com.example.wangzhengkui.preferencefile.preference.entity.ConfigureScreenEntity;
@@ -123,74 +126,44 @@ public class ConfigureActivity extends PreferenceActivity {
         int length = itemList == null ? 0 : itemList.size();
         for (int i = 0; i < length; i++) {
             ConfigureEntity childEntity = itemList.get(i);
+            ConfigureImp configureImp = null;
             switch (childEntity.getType()) {
                 case ConfigureType.SCREEN:
-                    ScreenConfigureImp screenPreference = new ScreenConfigureImp(this);
-                    screenPreference.setKey(childEntity.getKey());
-                    screenPreference.setTitle(childEntity.getTitle());
-                    screenPreference.setSummary(childEntity.getSummary());
-                    screenPreference.setDefaultValue(childEntity.getDefaultValue());
-                    screenPreference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
-                    screenPreference.setOrder(i);
-                    preferences.append(i, screenPreference);
+                    configureImp = new ScreenConfigureImp(this);
                     break;
                 case ConfigureType.CATEGORY:
-                    PreferenceCategory categoryPreference = new PreferenceCategory(this);
-                    categoryPreference.setKey(childEntity.getKey());
-                    categoryPreference.setTitle(childEntity.getTitle());
-                    categoryPreference.setSummary(childEntity.getSummary());
-                    categoryPreference.setDefaultValue(childEntity.getDefaultValue());
-                    categoryPreference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
-                    categoryPreference.setOrder(i);
-                    preferences.append(i, categoryPreference);
+                    configureImp = new CategoryConfigureImp(this);
                     break;
                 case ConfigureType.LIST:
-                    ListConfigureImp listPreference = new ListConfigureImp(this);
-                    listPreference.setKey(childEntity.getKey());
-                    listPreference.setTitle(childEntity.getTitle());
-                    listPreference.setSummary(childEntity.getSummary());
-                    listPreference.setDefaultValue(childEntity.getDefaultValue());
-                    listPreference.setEntries(((ConfigureListEntity) childEntity).getEntry());
-                    listPreference.setEntryValues(((ConfigureListEntity) childEntity).getEntry());
-                    listPreference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
-                    listPreference.setOrder(i);
-
-                    preferences.append(i, listPreference);
+                    configureImp = new ListConfigureImp(this);
+                    ((ListConfigureImp)configureImp).setEntries(((ConfigureListEntity) childEntity).getEntry());
+                    ((ListConfigureImp)configureImp).setEntryValues(((ConfigureListEntity) childEntity).getEntry());
                     break;
                 case ConfigureType.MULTILIST:
-                    MultiSelectListPreference multiSelectListPreference = new MultiSelectListPreference(this);
-                    multiSelectListPreference.setKey(childEntity.getKey());
-                    multiSelectListPreference.setTitle(childEntity.getTitle());
-                    multiSelectListPreference.setSummary(childEntity.getSummary());
-                    multiSelectListPreference.setDefaultValue(childEntity.getDefaultValue());
-                    multiSelectListPreference.setEntries(((ConfigureListEntity) childEntity).getEntry());
-                    multiSelectListPreference.setEntryValues(((ConfigureListEntity) childEntity).getEntry());
-                    multiSelectListPreference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
-                    multiSelectListPreference.setOrder(i);
-                    preferences.append(i, multiSelectListPreference);
+                    configureImp = new MultiSelectListConfigureImp(this);
+                    ((MultiSelectListConfigureImp)configureImp).setEntries(((ConfigureListEntity) childEntity).getEntry());
+                    ((MultiSelectListConfigureImp)configureImp).setEntryValues(((ConfigureListEntity) childEntity).getEntry());
                     break;
                 case ConfigureType.SWITCH:
-                    SwitchConfigureImp switchPreference = new SwitchConfigureImp(this);
-                    switchPreference.setKey(childEntity.getKey());
-                    switchPreference.setTitle(childEntity.getTitle());
-                    switchPreference.setSummary(childEntity.getSummary());
-                    switchPreference.setDefaultValue(childEntity.getDefaultValue());
-                    switchPreference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
-                    switchPreference.setOrder(i);
-                    preferences.append(i, switchPreference);
+                    configureImp = new SwitchConfigureImp(this);
                     break;
                 case ConfigureType.EDITOR:
-                    EditTextConfigureImp editTextPreference = new EditTextConfigureImp(this);
-                    editTextPreference.setKey(childEntity.getKey());
-                    editTextPreference.setTitle(childEntity.getTitle());
-                    editTextPreference.setSummary(childEntity.getSummary());
-                    editTextPreference.setDefaultValue(childEntity.getDefaultValue());
-                    editTextPreference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
-                    editTextPreference.getEditText().setSelectAllOnFocus(true);
-                    editTextPreference.setOrder(i);
-                    preferences.append(i, editTextPreference);
+                    configureImp = new EditTextConfigureImp(this);
+                    ((EditTextConfigureImp)configureImp).getEditText().setSelectAllOnFocus(true);
                     break;
             }
+
+//            configureImp.setListener(this);
+            configureImp.setValue(childEntity.getValue());
+            configureImp.setKey(childEntity.getKey());
+            configureImp.setTitle(childEntity.getTitle());
+            configureImp.setSummary(childEntity.getSummary());
+            configureImp.setDefaultValue(childEntity.getDefaultValue());
+            configureImp.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
+            configureImp.setOrder(i);
+
+            preferences.append(i, configureImp);
+//            preferences.add(configureImp);
 
         }
         return preferences;

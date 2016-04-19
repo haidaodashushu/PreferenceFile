@@ -110,7 +110,7 @@ public class ConfigureImp extends Preference {
             }
         }
 
-        final ImageView imageView = (ImageView) view.findViewById(R.id.icon);
+        /*final ImageView imageView = (ImageView) view.findViewById(R.id.icon);
         if (imageView != null) {
             if (getIcon() != null) {
                 imageView.setImageDrawable(getIcon());
@@ -118,7 +118,7 @@ public class ConfigureImp extends Preference {
             } else {
                 imageView.setVisibility(View.GONE);
             }
-        }
+        }*/
 
         if (getShouldDisableView()) {
             setEnabledStateOnViews(view, isEnabled());

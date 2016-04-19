@@ -126,7 +126,7 @@ public class ConfigureFrame extends FrameLayout implements
             return true;
         }
     };
-    SparseArray<ConfigureImp> preferences = new SparseArray<>(0);
+    LinkedList<ConfigureImp> preferences = new LinkedList<>();
     private ConfigureScreenEntity screenEntity;
     private ConfigureAdapter mRootAdapter;
 
@@ -154,10 +154,11 @@ public class ConfigureFrame extends FrameLayout implements
         } else {
             screenEntity = (ConfigureScreenEntity) ConfigureManager.getScreen(key);
         }
-        SparseArray<ConfigureImp> child = initData(screenEntity);
+        LinkedList<ConfigureImp> child = initData(screenEntity);
         preferences.clear();
         for (int i = 0; i < child.size(); i++) {
-            preferences.append(i, child.valueAt(i));
+//            preferences.append(i, child.valueAt(i));
+            preferences.add(child.get(i));
         }
         getListView(null, screenEntity);
         return this;
@@ -168,8 +169,8 @@ public class ConfigureFrame extends FrameLayout implements
     }
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-    public SparseArray<ConfigureImp> initData(ConfigureScreenEntity entity) {
-        SparseArray<ConfigureImp> preferences = new SparseArray<>(0);
+    public LinkedList<ConfigureImp> initData(ConfigureScreenEntity entity) {
+        LinkedList<ConfigureImp> preferences = new LinkedList<>();
         if (entity == null) {
             return preferences;
         }
@@ -213,7 +214,8 @@ public class ConfigureFrame extends FrameLayout implements
             configureImp.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
             configureImp.setOrder(i);
 
-            preferences.append(i, configureImp);
+//            preferences.append(i, configureImp);
+            preferences.add(configureImp);
 
         }
         return preferences;

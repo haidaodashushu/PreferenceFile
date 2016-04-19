@@ -3,6 +3,8 @@ package com.example.wangzhengkui.preferencefile;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
+import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.Switch;
@@ -13,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
 //    ListView listView;
 //    ConfigureAdapter adapter;
 //    SparseArray<KeyValue> array;
-    Switch switchId;
+    Button switchId;
     FrameLayout frameLv;
     ConfigureFrameParent configure;
     @Override
@@ -25,10 +27,10 @@ public class MainActivity extends AppCompatActivity {
 //        adapter = new ConfigureAdapter(this);
 //        listView.setAdapter(adapter);
         frameLv = (FrameLayout)findViewById(R.id.frameLv);
-        switchId = (Switch)findViewById(R.id.switchId);
-        switchId.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        switchId = (Button) findViewById(R.id.switchId);
+        switchId.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            public void onClick(View v) {
                 configure = new ConfigureFrameParent(MainActivity.this).getConfigure(null);
                 frameLv.addView(configure);
                 String title = configure.getCurrentScreen().getScreenEntity().getTitle();
@@ -36,8 +38,7 @@ public class MainActivity extends AppCompatActivity {
                     setTitle(title);
                 }
             }
-        });;
-//        Object object = ConfigureManager.getValue(Constants.apn);
+        });
     }
 
     @Override

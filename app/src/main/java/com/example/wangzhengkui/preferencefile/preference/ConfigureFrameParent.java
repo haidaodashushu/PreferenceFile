@@ -21,19 +21,6 @@ public class ConfigureFrameParent extends FrameLayout{
         super(context, attrs);
         this.mContext = context;
         setBackgroundColor(Color.parseColor("#fafafa"));
-
-        setFocusable(true);//这个和下面的这个命令必须要设置了，才能监听back事件。
-        setFocusableInTouchMode(true);
-        /*setOnKeyListener(new OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                Log.i("ConfigureFrameParent", "onKeyDown = " + event.getKeyCode());
-                if (keyCode == KeyEvent.KEYCODE_BACK) {
-
-                }
-                return false;
-            }
-        });*/
     }
 
     public ConfigureFrameParent getConfigure(String key) {

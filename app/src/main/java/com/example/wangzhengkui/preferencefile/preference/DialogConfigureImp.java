@@ -306,7 +306,7 @@ public class DialogConfigureImp extends ConfigureImp implements
             return null;
         }
 
-        LayoutInflater inflater = LayoutInflater.from(mBuilder.getContext());
+        LayoutInflater inflater = LayoutInflater.from(mContext);
         return inflater.inflate(mDialogLayoutResId, null);
     }
 

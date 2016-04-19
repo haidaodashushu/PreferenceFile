@@ -9,17 +9,19 @@ import android.widget.TextView;
 
 import com.example.wangzhengkui.preferencefile.preference.ConfigureImp;
 
+import java.util.LinkedList;
+
 /**
  * @author Administrator on 2016-04-05 15:23
  */
 public class ConfigureAdapter extends BaseAdapter {
     Context mContext;
-    SparseArray<ConfigureImp> date;
+    LinkedList<ConfigureImp> date;
     public ConfigureAdapter(Context mContext) {
         this.mContext = mContext;
     }
 
-    public void changeData(SparseArray<ConfigureImp> array) {
+    public void changeData(LinkedList<ConfigureImp> array) {
         if (array == null) {
             return;
         }

@@ -19,6 +19,8 @@ import com.example.wangzhengkui.preferencefile.preference.entity.ConfigureScreen
 import com.example.wangzhengkui.preferencefile.preference.ConfigureFrameParent;
 import com.example.wangzhengkui.preferencefile.preference.ConfigureImp;
 
+import java.util.LinkedList;
+
 /**
  * @author WangZhengkui on 2016-04-17 19:40
  */
@@ -27,7 +29,7 @@ public class ConfigureDialog extends Dialog implements AdapterView.OnItemClickLi
     ListView mListView;
     private ConfigureAdapter mRootAdapter;
 
-    SparseArray<ConfigureImp> preferences = new SparseArray<>(0);
+    LinkedList<ConfigureImp> preferences = new LinkedList<>();
 
     public ConfigureDialog(Context context) {
         this(context,R.style.ConfigureDialog_Transparent_FullScreen);

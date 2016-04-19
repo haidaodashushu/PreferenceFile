@@ -25,7 +25,7 @@
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:orientation="horizontal"
     android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingEnd="?android:attr/scrollbarSize">
+    android:paddingRight="?android:attr/scrollbarSize">
 
     <ImageView
         android:id="@+id/icon"
@@ -48,17 +48,21 @@
             android:ellipsize="marquee"
             android:fadingEdge="horizontal"
             android:singleLine="true"
-            android:textAppearance="?android:attr/textAppearanceListItem"/>
+            android:textSize="16sp"
+            android:textColor="@color/primary_text_dark"
+            android:fontFamily="sans-serif"
+            />
 
         <TextView
             android:id="@+id/summary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@id/title"
+            android:layout_alignLeft="@id/title"
             android:layout_below="@id/title"
+            android:textSize="14sp"
+            android:fontFamily="sans-serif"
             android:maxLines="4"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="?android:attr/textColorSecondary"/>
+            android:textColor="@color/secondary_text_dark"/>
 
     </RelativeLayout>
 

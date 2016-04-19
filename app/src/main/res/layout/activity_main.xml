@@ -11,12 +11,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:dividerHeight="0px"/>-->
-    <Switch
+    <Button
         android:id="@+id/switchId"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:padding="15dp"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16sp"
+        android:text="打开调试配置功能"
         />
     <FrameLayout
         android:id="@+id/frameLv"

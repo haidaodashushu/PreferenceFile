@@ -8,9 +8,8 @@ import com.example.wangzhengkui.preferencefile.preference.cache.PreferencesCache
 import com.example.wangzhengkui.preferencefile.preference.entity.ConfigureEntity;
 import com.example.wangzhengkui.preferencefile.preference.entity.ConfigureScreenEntity;
 import com.example.wangzhengkui.preferencefile.preference.entity.Constants;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.example.wangzhengkui.preferencefile.preference.json.JSONException;
+import com.example.wangzhengkui.preferencefile.preference.json.JSONObject;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;

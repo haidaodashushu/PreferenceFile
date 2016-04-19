@@ -7,10 +7,9 @@ import com.example.wangzhengkui.preferencefile.preference.entity.ConfigureListEn
 import com.example.wangzhengkui.preferencefile.preference.entity.ConfigureScreenEntity;
 import com.example.wangzhengkui.preferencefile.preference.entity.ConfigureType;
 import com.example.wangzhengkui.preferencefile.preference.entity.Constants;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.example.wangzhengkui.preferencefile.preference.json.JSONArray;
+import com.example.wangzhengkui.preferencefile.preference.json.JSONException;
+import com.example.wangzhengkui.preferencefile.preference.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -31,7 +30,7 @@ public class DataParseTools {
         //读取第一屏的数据
         Iterator<String> keys = jsonObject.keys();
         ConfigureScreenEntity screenEntity = new ConfigureScreenEntity();
-        LinkedList<ConfigureEntity> linkedList = new LinkedList<>();
+        LinkedList<ConfigureEntity> linkedList = new LinkedList<ConfigureEntity>();
         try {
             if (key == null) {
                 //读取第一屏screen的key;

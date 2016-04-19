@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
+    <color name="title_enable">#39000000</color>
+    <color name="title_default">#de000000</color>
 
     <color name="dim_foreground_dark">#bebebe</color>
 
@@ -20,4 +22,8 @@
     <color name="bright_foreground_light">@color/background_dark</color>
 
     <color name="bright_foreground_dark_inverse">@color/bright_foreground_light</color>
+
+    <color name="bright_foreground_dark">@color/background_dark</color>
+
+    <color name="bright_foreground_dark_disabled">#80ffffff</color>
 </resources>
