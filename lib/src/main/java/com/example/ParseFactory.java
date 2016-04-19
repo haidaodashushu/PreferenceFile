@@ -3,6 +3,7 @@ package com.example;
 import org.xml.sax.Attributes;
 
 import java.util.LinkedList;
+import java.util.regex.Pattern;
 
 /**
  * @author Administrator on 2016-04-14 11:07
@@ -11,7 +12,7 @@ public class ParseFactory {
 
 
     /**
-     * å±æ€§è§£æ
+     * ÊôĞÔ½âÎö
      * @param qName
      * @param attrs
      * @return
@@ -19,20 +20,20 @@ public class ParseFactory {
     public static StringBuilder parseAttributes(String qName, Attributes attrs) {
         StringBuilder sb = new StringBuilder();
 
-        //å¤„ç†entryå’Œitemæ ‡ç­¾
+        //´¦ÀíentryºÍitem±êÇ©
         switch (qName) {
             case "configure":
 //                return parseConfigureAttributes(qName,attrs);
                 return sb;
             case "screen":
             case "category":
-            case "list":
             case "multiList":
+            case "list":
             case "editor":
                 readAttributes(attrs,sb);
                 break;
             case "switch":
-                //æ·»åŠ "entry":[,
+                //Ìí¼Ó"entry":[,
                 AppendTools.appendWithQuotes(sb,"entry");
                 AppendTools.appendObj(sb,":[");
                 AppendTools.appendWithQuotes(sb,"true");
@@ -42,7 +43,7 @@ public class ParseFactory {
                 readAttributes(attrs,sb);
                 break;
             case "entry":
-                //æ·»åŠ "entry":[,
+                //Ìí¼Ó"entry":[,
                 AppendTools.appendWithQuotes(sb,"entry");
                 AppendTools.appendObj(sb,":[");
                 AppendTools.appendN(sb, 1);
@@ -50,54 +51,64 @@ public class ParseFactory {
             case "item":
                 return sb;
         }
-        //æ·»åŠ "type":"value",
-        //æ·»åŠ çš„é€—å·ä¼šåœ¨endElement()æ–¹æ³•ä¸­åˆ é™¤
+
+
+
+        //Ìí¼Ó"type":"value",
+        //Ìí¼ÓµÄ¶ººÅ»áÔÚendElement()·½·¨ÖĞÉ¾³ı
         AppendTools.appendJson(sb,"type",qName);
         return sb;
     }
 
-    private static void readAttributes(Attributes attrs,StringBuilder sb) {
 
+    private static void readAttributes(Attributes attrs,StringBuilder sb) {
+        //Èç¹ûÃ»ÓĞkeyÖµ£¬Ôò»áÒÔµ±Ç°Ê±¼ä×÷ÎªkeyÖµ£¬Ìí¼Ó
+        if (getAttrsIndex(attrs, "key")==-1) {
+            //Ìí¼Ó"key":{
+            StringBuilder sbKey = new StringBuilder();
+            AppendTools.appendWithQuotes(sbKey,System.currentTimeMillis());
+            AppendTools.appendObj(sbKey,":{");
+            AppendTools.appendN(sbKey, 1);
+            //Òª½«keyÖµÌí¼Óµ½µÚÒ»Ïî
+            sb.insert(0, sbKey.toString());
+        }
         for (int i = 0; i < attrs.getLength(); i++) {
             switch (attrs.getQName(i)) {
                 case "key":
-                    //æ·»åŠ "value":{
+                    //Ìí¼Ó"key":{
                     StringBuilder sbKey = new StringBuilder();
                     AppendTools.appendWithQuotes(sbKey,attrs.getValue(i));
                     AppendTools.appendObj(sbKey,":{");
                     AppendTools.appendN(sbKey, 1);
-                    //è¦å°†keyå€¼æ·»åŠ åˆ°ç¬¬ä¸€é¡¹
+                    //Òª½«keyÖµÌí¼Óµ½µÚÒ»Ïî
                     sb.insert(0, sbKey.toString());
                     break;
                 case "title":
-                    //æ·»åŠ "title":"value",
+                    //Ìí¼Ó"title":"value",
                     AppendTools.appendJson(sb,"title",attrs.getValue(i));
                     break;
                 case "summary":
                     AppendTools.appendJson(sb,"summary",attrs.getValue(i));
                     break;
+                //ÒÔdefaultValueÎª×¼
                 case "defaultValue":
-                    //æ·»åŠ "defaultValue":"value",
+                    //Ìí¼Ó"defaultValue":"value",
                     AppendTools.appendJson(sb,"defaultValue",attrs.getValue(i));
                     AppendTools.appendJson(sb,"value",attrs.getValue(i));
                     break;
-                case "value":
-                    //æ·»åŠ "defaultValue":"value",
+                /*case "value":
+                    //Ìí¼Ó"defaultValue":"value",
                     AppendTools.appendJson(sb,"value",attrs.getValue(i));
-                    break;
+                    break;*/
                 case "version":
-                    //æ·»åŠ "defaultValue":"value",
-//                    AppendTools.appendJson(sb,"version",attrs.getValue(i));
                     break;
                 case "mode":
-                    //æ·»åŠ "defaultValue":"value",
-//                    AppendTools.appendJson(sb,"mode",attrs.getValue(i));
                     break;
             }
         }
     }
     /**
-     * è§£æå˜é‡éƒ¨åˆ†
+     * ½âÎö±äÁ¿²¿·Ö
      * @param qName
      * @param attrs
      * @return "key="value";
@@ -105,21 +116,21 @@ public class ParseFactory {
     public static LinkedList<String> parseVariable(String qName, Attributes attrs, int mode) {
         LinkedList<String> variableList = new LinkedList<>();
         StringBuilder variableSb = new StringBuilder();
-        //å¦‚æœæ˜¯æ­£å¼ç‰ˆæœ¬ï¼Œåˆ™ä¸æ·»åŠ versionå˜é‡ï¼Œ
-        //å¦‚æœæ˜¯æµ‹è¯•ç‰ˆæœ¬ï¼Œå¦‚æœä¸å­˜åœ¨version,åˆ™é»˜è®¤ä¸º1
+        //Èç¹ûÊÇÕıÊ½°æ±¾£¬Ôò²»Ìí¼Óversion±äÁ¿£¬
+        //Èç¹ûÊÇ²âÊÔ°æ±¾£¬Èç¹û²»´æÔÚversion,ÔòÄ¬ÈÏÎª1
         if ("configure".equals(qName)&&mode ==1) {
-            //æ·»åŠ version
+            //Ìí¼Óversion
             int index = getAttrsIndex(attrs,"version");
-            AppendTools.appendKey(variableSb,"version");
+            AppendTools.appendKey(variableSb,"public static final String version");
             if (index == -1) {
                 AppendTools.appendValue(variableSb, "1");
             } else {
                 AppendTools.appendValue(variableSb,attrs.getValue(index));
             }
             variableList.add(variableSb.toString());
-            //æ·»åŠ mode
+            //Ìí¼Ómode
             variableSb.delete(0,variableSb.length());
-            AppendTools.appendKey(variableSb,"mode");
+            AppendTools.appendKey(variableSb,"public static final String mode");
             AppendTools.appendValue(variableSb, mode);
             variableList.add(variableSb.toString());
         }
@@ -129,18 +140,41 @@ public class ParseFactory {
         if (index == -1) {
             return variableList;
         }
-        AppendTools.appendKey(variableSb, attrs.getValue(index));
-
-        if (mode == 1) {
-            //æµ‹è¯•
-            AppendTools.appendValue(variableSb, attrs.getValue(index));
+        String key = attrs.getValue(index);
+        if (qName.equals("multiList")) {
+            if (mode == 1) {
+                key = "public static String[] " + key;
+            } else {
+                key = "public static final String[] " + key;
+            }
         } else {
-            //æ­£å¼
+            if (mode == 1) {
+                key = "public static String " + key;
+            } else {
+                key = "public static final String " + key;
+            }
+        }
+        AppendTools.appendKey(variableSb,key);
+        if (mode == 1) {
+            //²âÊÔ
+            if (qName.equals("multiList")) {
+                AppendTools.appendArray(variableSb, new String[]{attrs.getValue(index)});
+            } else {
+                AppendTools.appendValue(variableSb, attrs.getValue(index));
+            }
+        } else {
+            //ÕıÊ½
             index = getAttrsIndex(attrs,"defaultValue");
             if (index == -1) {
                 AppendTools.appendValue(variableSb,"");
             } else {
-                AppendTools.appendValue(variableSb,attrs.getValue(index));
+                if (qName.equals("multiList")) {
+                    String arrays = attrs.getValue(index);
+                    String[] spilt = arrays.split(",");
+                    AppendTools.appendArray(variableSb, spilt);
+                } else {
+                    AppendTools.appendValue(variableSb,attrs.getValue(index));
+                }
             }
         }
 
@@ -149,7 +183,7 @@ public class ParseFactory {
     }
 
     /**
-     * è¿”å›è¯¥æ ‡ç­¾ä¸­çš„
+     * ·µ»Ø¸Ã±êÇ©ÖĞµÄqNameµÄÏÂ±ê
      * @param attrs
      * @param qName
      * @return
@@ -162,4 +196,5 @@ public class ParseFactory {
         }
         return -1;
     }
+
 }

@@ -9,6 +9,17 @@ public class AppendTools {
         variableSb.append("=");
 
     }
+    public static void appendArray(StringBuilder variableSb,Object[] value) {
+        appendObj(variableSb,"{");
+        for (int i = 0; i < value.length; i++) {
+            appendObj(variableSb,"\""+value[i]+"\"");
+            if (i < value.length - 1) {
+                appendObj(variableSb,",");
+            }
+        }
+        appendObj(variableSb,"}");
+        appendObj(variableSb,";");
+    }
     public static void appendValue(StringBuilder variableSb,Object value) {
 
         appendObj(variableSb,"\""+value+"\"");
@@ -22,7 +33,6 @@ public class AppendTools {
         appendN(sb, 1);
     }
     /**
-     * 添加值到sb中，该值会添加双引号
      * @param sb
      * @param value
      */

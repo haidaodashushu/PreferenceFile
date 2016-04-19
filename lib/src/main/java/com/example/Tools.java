@@ -23,12 +23,12 @@ import javax.xml.parsers.SAXParserFactory;
  */
 public class Tools {
     public static String packageStr = "";
-    /**debugæ¨¡å¼ä¸º1ï¼Œreleaseæ¨¡å¼ä¸º0*/
+    /**debugÄ£Ê½Îª1£¬releaseÄ£Ê½Îª0*/
     public static int mode = 1;
     public static void main(String[] args) {
         String xmlPath = "D:\\workspace_zk\\PreferenceFile\\app\\src\\main\\assets\\config.cfg";
-        String javaPath = "D:\\workspace_zk\\PreferenceFile\\app\\src\\main\\java\\com\\example\\wangzhengkui\\preferencefile\\entity\\Constants.java";
-        packageStr = "package com.example.wangzhengkui.preferencefile.entity";
+        String javaPath = "D:\\workspace_zk\\PreferenceFile\\app\\src\\main\\java\\com\\example\\wangzhengkui\\preferencefile\\preference\\entity\\Constants.java";
+        packageStr = "package com.example.wangzhengkui.preferencefile.preference.entity";
         config2Json(xmlPath, javaPath);
     }
 
@@ -73,7 +73,7 @@ public class Tools {
         }
 
         /**
-         * æ–‡æ¡£è§£æç»“æŸ
+         * ÎÄµµ½âÎö½áÊø
          *
          * @throws SAXException
          */
@@ -81,17 +81,17 @@ public class Tools {
         public void endDocument() throws SAXException {
             super.endDocument();
             if (mode == 1) {
-                //åˆ é™¤æœ«å°¾çš„é€—å·
+                //É¾³ıÄ©Î²µÄ¶ººÅ
                 deleteComma(jsonSb);
                 jsonSb.append("}");
             }
             System.out.println(jsonSb.toString());
-            //ç”Ÿæˆç±»
+            //Éú³ÉÀà
             constructClass(javaPath, lineList,jsonSb,mode);
         }
 
         /**
-         * å¼€å§‹è§£æå…ƒç´ æ ‡ç­¾
+         * ¿ªÊ¼½âÎöÔªËØ±êÇ©
          *
          * @param uri
          * @param localName
@@ -118,16 +118,16 @@ public class Tools {
             }
 
             if (mode == 1) {
-                //è§£æjsonéƒ¨åˆ†
+                //½âÎöjson²¿·Ö
                 jsonSb.append(ParseFactory.parseAttributes(qName, attributes));
             }
-            //è§£æå˜é‡éƒ¨åˆ†
+            //½âÎö±äÁ¿²¿·Ö
             lineList.addAll(ParseFactory.parseVariable(qName,attributes,mode));
 
         }
 
         /**
-         * å…ƒç´ æ ‡ç­¾è§£æç»“æŸ
+         * ÔªËØ±êÇ©½âÎö½áÊø
          *
          * @param uri
          * @param localName
@@ -139,15 +139,15 @@ public class Tools {
             super.endElement(uri, localName, qName);
             if (mode == 1) {
                 if ("entry".equals(qName)) {
-                    //å…ˆå…ƒç´ æœ«å°¾åˆ é™¤é€—å·
+                    //ÏÈÔªËØÄ©Î²É¾³ı¶ººÅ
                     deleteComma(jsonSb);
-                    //è¡¨ç¤ºæ¯ä¸ªarrayå¯¹è±¡çš„ç»“æŸï¼Œæ·»åŠ çš„é€—å·ä¼šåœ¨æ–‡æ¡£è§£æå®Œæˆä¹‹ååˆ é™¤æœ«å°¾çš„é€—å·
+                    //±íÊ¾Ã¿¸öarray¶ÔÏóµÄ½áÊø£¬Ìí¼ÓµÄ¶ººÅ»áÔÚÎÄµµ½âÎöÍê³ÉÖ®ºóÉ¾³ıÄ©Î²µÄ¶ººÅ
                     jsonSb.append("],");
                     AppendTools.appendN(jsonSb, 1);
                 } else if (!"item".equals(qName)&&!"configure".equals(qName)) {
-                    //å…ˆå…ƒç´ æœ«å°¾åˆ é™¤é€—å·
+                    //ÏÈÔªËØÄ©Î²É¾³ı¶ººÅ
                     deleteComma(jsonSb);
-                    //è¡¨ç¤ºæ¯ä¸ªjsonå¯¹è±¡çš„ç»“æŸï¼Œæ·»åŠ çš„é€—å·ä¼šåœ¨æ–‡æ¡£è§£æå®Œæˆä¹‹ååˆ é™¤æœ«å°¾çš„é€—å·
+                    //±íÊ¾Ã¿¸öjson¶ÔÏóµÄ½áÊø£¬Ìí¼ÓµÄ¶ººÅ»áÔÚÎÄµµ½âÎöÍê³ÉÖ®ºóÉ¾³ıÄ©Î²µÄ¶ººÅ
                     jsonSb.append("},");
                     AppendTools.appendN(jsonSb, 1);
                 }
@@ -165,7 +165,7 @@ public class Tools {
         }
 
         /**
-         * åˆ é™¤sbä¸­çš„æœ«å°¾çš„é€—å·ï¼Œå¦‚æœæœ«å°¾ä¸æ˜¯é€—å·ï¼Œåˆ™ä¸åˆ é™¤
+         * É¾³ısbÖĞµÄÄ©Î²µÄ¶ººÅ£¬Èç¹ûÄ©Î²²»ÊÇ¶ººÅ£¬Ôò²»É¾³ı
          *
          * @param sb
          */
@@ -173,8 +173,8 @@ public class Tools {
             int index = sb.lastIndexOf(",");
             if (index != sb.length() - 1) {
                 String end = sb.substring(index + 1, sb.length());
-                //å¦‚æœæ˜¯æ¢è¡Œ
-                if (end.matches("\n")) {
+                //Èç¹ûÊÇ»»ĞĞ
+                if (end.matches("\\*\n")) {
                     sb.replace(index, index + 1, "");
                 }
             } else if (index == sb.length() - 1) {
@@ -190,48 +190,43 @@ public class Tools {
             className = className.split("\\.")[0];
             return className;
         } catch (Exception e) {
-//            System.out.println("è¾“å…¥pathå‚æ•°é”™è¯¯ï¼Œè¯·è¾“å…¥æ–‡ä»¶è·¯å¾„ï¼Œè€Œä¸æ˜¯æ–‡ä»¶å¤¹è·¯å¾„");
+//            System.out.println("ÊäÈëpath²ÎÊı´íÎó£¬ÇëÊäÈëÎÄ¼şÂ·¾¶£¬¶ø²»ÊÇÎÄ¼ş¼ĞÂ·¾¶");
             System.err.println("input \"path\" params error , please input file path, not directory path");
         }
         return null;
     }
 
     /**
-     * æ„é€ ç±»ç»“æ„
+     * ¹¹ÔìÀà½á¹¹
      * @param path
-     * @param lineList æ‰€æœ‰çš„å˜é‡å£°æ˜
+     * @param lineList ËùÓĞµÄ±äÁ¿ÉùÃ÷
      * @param mode
      */
     public static void constructClass(String path,LinkedList<String> lineList,StringBuilder jsonSb,int mode) {
-        //æ„é€ å˜é‡
+        //¹¹Ôì±äÁ¿
         StringBuilder variableSb = new StringBuilder();
-        //æ·»åŠ jsonDataå˜é‡
-        if (mode == 1) {
-//            AppendTools.appendKey(variableSb, "public static String " + "jsonData");
-            lineList.addFirst("jsonDate = "+"\""+jsonSb.toString()+"\";");
-        } else {
-//            AppendTools.appendKey(variableSb, "public static final String " + "jsonData");
-            lineList.addFirst("jsonDate = "+"\""+""+"\";");
-        }
-        for (int i = 0; i < lineList.size(); i++) {
+        //Ìí¼ÓjsonData±äÁ¿
+            lineList.addFirst("public static final String jsonDate = "+"\""+jsonSb.toString()+"\";");
+
+        /*for (int i = 0; i < lineList.size(); i++) {
             if (mode == 1) {
                 lineList.set(i,"public static String " + lineList.get(i)+"\n");
-                //æµ‹è¯•åŒ…
+                //²âÊÔ°ü
             } else {
-                //æ­£å¼åŒ…
+                //ÕıÊ½°ü
                 lineList.set(i,"public static final String " + lineList.get(i)+"\n");
             }
-        }
+        }*/
 
 
-        //ç»™æ‰€æœ‰çš„å˜é‡å®šä¹‰æ·»åŠ åˆ¶è¡¨ç¬¦å’Œæ¢è¡Œç¬¦
+        //¸øËùÓĞµÄ±äÁ¿¶¨ÒåÌí¼ÓÖÆ±í·ûºÍ»»ĞĞ·û
         for (int i = 0; i < lineList.size(); i++) {
             lineList.set(i,"\t\t"+lineList.get(i)+"\n");
         }
 
         File file = new File(path);
         if (file.isDirectory()) {
-//            System.out.println("è¾“å…¥pathå‚æ•°é”™è¯¯ï¼Œè¯·è¾“å…¥æ–‡ä»¶è·¯å¾„ï¼Œè€Œä¸æ˜¯æ–‡ä»¶å¤¹è·¯å¾„");
+//            System.out.println("ÊäÈëpath²ÎÊı´íÎó£¬ÇëÊäÈëÎÄ¼şÂ·¾¶£¬¶ø²»ÊÇÎÄ¼ş¼ĞÂ·¾¶");
             System.err.println("input \"path\" params error , please input file path, not directory path");
             return;
         }
@@ -245,14 +240,14 @@ public class Tools {
 
         lineList.addLast("\n}");
 
-        //å†™å…¥ç±»
+        //Ğ´ÈëÀà
         write(path, lineList);
     }
 
     /**
-     * å°†valueçš„å€¼å†™å…¥æ–‡ä»¶
+     * ½«valueµÄÖµĞ´ÈëÎÄ¼ş
      * @param path
-     * @param value å­˜æ”¾ç±»çš„ä»£ç 
+     * @param value ´æ·ÅÀàµÄ´úÂë
      */
     public static void write(String path, LinkedList<String> value) {
         File file = new File(path);
