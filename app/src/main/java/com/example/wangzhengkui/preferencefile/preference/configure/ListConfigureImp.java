@@ -1,4 +1,4 @@
-package com.example.wangzhengkui.preferencefile.preference;
+package com.example.wangzhengkui.preferencefile.preference.configure;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -6,8 +6,6 @@ import android.content.DialogInterface;
 import android.content.res.TypedArray;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.preference.EditTextPreference;
-import android.preference.ListPreference;
 import android.support.annotation.ArrayRes;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -247,7 +245,7 @@ public class ListConfigureImp extends DialogConfigureImp {
      */
     public void setValue(Object value) {
         // Always persist/notify the first time.
-        final boolean changed = !TextUtils.equals(this.value==null?null:this.value.toString(), value==null?null:value.toString());
+        final boolean changed = !TextUtils.equals(this.value==null?"":this.value.toString(), value==null?"":value.toString());
         if (value!=null&&(changed || !mValueSet)) {
             this.value = value;
             mValueSet = true;
@@ -259,9 +257,9 @@ public class ListConfigureImp extends DialogConfigureImp {
     }
     @Override
     public void setInitialValue(Object value) {
-        if (value != null) {
-            setSummary(value.toString());
-        }
+        value = value==null?"":value;
+        setValue(value);
+        setSummary(value.toString());
     }
 
     @Override

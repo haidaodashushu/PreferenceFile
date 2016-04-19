@@ -1,24 +1,17 @@
-package com.example.wangzhengkui.preferencefile.preference;
+package com.example.wangzhengkui.preferencefile.preference.configure;
 
 import android.content.Context;
 import android.preference.Preference;
-import android.preference.PreferenceActivity;
-import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
-import android.preference.PreferenceScreen;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.wangzhengkui.preferencefile.R;
-import com.example.wangzhengkui.preferencefile.preference.entity.ConfigureEntity;
 import com.example.wangzhengkui.preferencefile.preference.manager.ConfigureManager;
-
-import org.json.JSONArray;
 
 import java.util.Iterator;
 import java.util.Set;
@@ -290,7 +283,9 @@ public class ConfigureImp extends Preference {
 
 
     public boolean persist(String key,Object value) {
-        ConfigureManager.writeCacheValue(key,value.toString());
+        if (!TextUtils.isEmpty(key)) {
+            ConfigureManager.writeCacheValue(key,value.toString());
+        }
         return true;
     }
 

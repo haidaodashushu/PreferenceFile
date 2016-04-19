@@ -1,4 +1,4 @@
-package com.example.wangzhengkui.preferencefile;
+package com.example.wangzhengkui.preferencefile.preference.slide;
 
 import android.content.Context;
 import android.graphics.Color;

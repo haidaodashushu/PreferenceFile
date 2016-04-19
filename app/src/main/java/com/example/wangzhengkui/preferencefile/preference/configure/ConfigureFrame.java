@@ -1,6 +1,7 @@
-package com.example.wangzhengkui.preferencefile.preference;
+package com.example.wangzhengkui.preferencefile.preference.configure;
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -16,8 +17,6 @@ import android.preference.RingtonePreference;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.util.SparseArray;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
@@ -26,8 +25,8 @@ import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import com.example.wangzhengkui.preferencefile.R;
-import com.example.wangzhengkui.preferencefile.SlideConfig;
-import com.example.wangzhengkui.preferencefile.SlideFrame;
+import com.example.wangzhengkui.preferencefile.preference.slide.SlideConfig;
+import com.example.wangzhengkui.preferencefile.preference.slide.SlideFrame;
 import com.example.wangzhengkui.preferencefile.preference.adapter.ConfigureAdapter;
 import com.example.wangzhengkui.preferencefile.preference.entity.ConfigureEntity;
 import com.example.wangzhengkui.preferencefile.preference.entity.ConfigureListEntity;
@@ -41,10 +40,9 @@ import java.util.LinkedList;
  * @author WangZhengkui on 2016-04-17 19:40
  */
 public class ConfigureFrame extends FrameLayout implements
-        AdapterView.OnItemClickListener,DialogInterface.OnDismissListener,ConfigureImp.OnPreferenceChangeInternalListener{
+        AdapterView.OnItemClickListener,AdapterView.OnItemLongClickListener,DialogInterface.OnDismissListener,ConfigureImp.OnPreferenceChangeInternalListener{
     Context mContext;
     ListView mListView;
-    private ConfigureScreenEntity entity;
     ConfigureFrameParent configureFrameParent;
     /**
      * A preference value change listener that updates the preference's summary
@@ -255,13 +253,12 @@ public class ConfigureFrame extends FrameLayout implements
      */
     public void bind(ListView listView) {
         listView.setOnItemClickListener(this);
+        listView.setOnItemLongClickListener(this);
         if (mRootAdapter == null) {
             mRootAdapter = getRootAdapter();
             listView.setAdapter(mRootAdapter);
         }
         mRootAdapter.changeData(preferences);
-
-//        onAttachedToActivity();
     }
 
     @Override
@@ -276,7 +273,32 @@ public class ConfigureFrame extends FrameLayout implements
         final ConfigureImp preference = (ConfigureImp) item;
         preference.performClick();
     }
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+        AlertDialog.Builder  builder = new AlertDialog.Builder(mContext);
+        builder.setTitle("重置功能");
+        builder.setMessage("是否重置该选项");
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (!(mRootAdapter.getItem(position) instanceof ConfigureImp)) {
+                    return;
+                }
+                ConfigureImp configureImp = (ConfigureImp) mRootAdapter.getItem(position);
+                configureImp.setInitialValue(screenEntity.getItemList().get(position).getDefaultValue());
 
+            }
+        });
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.create().show();
+
+        return true;
+    }
 
     public ConfigureAdapter getRootAdapter() {
         if (mRootAdapter == null) {
@@ -302,4 +324,5 @@ public class ConfigureFrame extends FrameLayout implements
             mRootAdapter.notifyDataSetChanged();
         }
     }
+
 }

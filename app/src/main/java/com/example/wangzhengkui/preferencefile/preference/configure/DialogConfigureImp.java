@@ -1,4 +1,4 @@
-package com.example.wangzhengkui.preferencefile.preference;
+package com.example.wangzhengkui.preferencefile.preference.configure;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;

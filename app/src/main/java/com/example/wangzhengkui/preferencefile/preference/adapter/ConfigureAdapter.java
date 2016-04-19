@@ -1,13 +1,12 @@
 package com.example.wangzhengkui.preferencefile.preference.adapter;
 
 import android.content.Context;
-import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.example.wangzhengkui.preferencefile.preference.ConfigureImp;
+import com.example.wangzhengkui.preferencefile.preference.configure.ConfigureImp;
 
 import java.util.LinkedList;
 

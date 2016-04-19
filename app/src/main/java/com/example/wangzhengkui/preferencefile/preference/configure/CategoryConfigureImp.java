@@ -1,10 +1,6 @@
-package com.example.wangzhengkui.preferencefile.preference;
+package com.example.wangzhengkui.preferencefile.preference.configure;
 
 import android.content.Context;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceCategory;
-import android.text.Layout;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +8,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.wangzhengkui.preferencefile.R;
-
-import org.json.JSONObject;
 
 /**
  * @author Administrator on 2016-04-15 20:31

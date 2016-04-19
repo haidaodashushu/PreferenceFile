@@ -5,11 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.FrameLayout;
-import android.widget.Switch;
 
-import com.example.wangzhengkui.preferencefile.preference.ConfigureFrameParent;
+import com.example.wangzhengkui.preferencefile.preference.configure.ConfigureFrameParent;
 
 public class MainActivity extends AppCompatActivity {
 //    ListView listView;

@@ -1,4 +1,4 @@
-package com.example.wangzhengkui.preferencefile.preference;
+package com.example.wangzhengkui.preferencefile.preference.configure;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -9,11 +9,7 @@ import android.os.Parcelable;
 import android.support.annotation.ArrayRes;
 import android.util.AttributeSet;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 /**

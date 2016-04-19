@@ -1,4 +1,4 @@
-package com.example.wangzhengkui.preferencefile.preference;
+package com.example.wangzhengkui.preferencefile.preference.configure;
 
 import android.content.Context;
 import android.content.SharedPreferences;
